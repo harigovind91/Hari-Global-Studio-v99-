@@ -1,0 +1,12 @@
+{
+  "name": "Hari Global Studio v99",
+  "description": "Advanced software for IT, Electronics, Automobile, Agriculture, Robotics, and Research sectors. Dedicated to protecting all living beings and the planet.",
+  "version": "99.0.0",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "author": "Hari Govind Singh Chauhan",
+  "location": "Lucknow, Uttar Pradesh"
+}
+
