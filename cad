@@ -1,0 +1,7 @@
+<div id="editor-ui">
+    <video id="main-preview" controls style="width:100%; max-height:300px;"></video>
+    <input type="file" id="upload-video" accept="video/*">
+    <div class="timeline" style="background:#222; height:50px; margin-top:10px;">
+        </div>
+    <button onclick="applyAIFilter()">Apply HAI AI Filter</button>
+</div>
