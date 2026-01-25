@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="auto">
+<head>
+    <meta charset="UTF-8">
+    <title>HARI GLOBAL STUDIO | HAI (Hari AI) Universal System</title>
+    <style>
+        :root { --neon: #00f2fe; --bg: #030303; --card: #111; }
+        body { margin: 0; background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
+        
+        /* Universal Language Header */
+        header { padding: 20px; text-align: center; border-bottom: 1px solid var(--neon); background: rgba(0,0,0,0.9); position: sticky; top: 0; z-index: 100; }
+        
+        /* Service Circles (The Curcil) */
+        .service-belt { display: flex; overflow-x: auto; padding: 20px; gap: 20px; scrollbar-width: none; }
+        .circle-btn { 
+            min-width: 120px; height: 120px; border-radius: 50%; background: var(--card);
+            border: 2px solid var(--neon); display: flex; flex-direction: column;
+            align-items: center; justify-content: center; cursor: pointer; transition: 0.4s;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+        }
+        .circle-btn:hover { transform: scale(1.1) rotate(10deg); box-shadow: 0 0 25px var(--neon); }
+        .circle-btn span { font-size: 40px; }
+        .circle-label { font-size: 11px; margin-top: 8px; text-decoration: none; font-weight: bold; }
+
+        /* The App Folders (Infinite Grid) */
+        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 25px; padding: 40px; }
+        .folder-card { 
+            background: var(--card); border-radius: 15px; padding: 20px; text-align: center;
+            cursor: pointer; border: 1px solid #333; transition: 0.3s;
+        }
+        .folder-card:hover { border-color: var(--neon); background: #1a1a1a; }
+        .folder-icon { width: 60px; height: 60px; margin-bottom: 10px; }
+
+        /* Computer Mode Window */
+        #desktop-view { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: black; z-index: 1000; 
+        }
+        .top-bar { background: #222; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+        iframe { width: 100%; height: calc(100% - 50px); border: none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 style="letter-spacing: 5px; color: var(--neon);">HARI GLOBAL STUDIO</h1>
+    <div id="hai-status">HAI (Hari AI) | Language: Auto-Detect | Security: Ghost Mode ON</div>
+</header>
+
+<div class="service-belt">
+    <div class="circle-btn" onclick="filterApps('infrastructure')"><span>🏗️</span><div class="circle-label">Engineering</div></div>
+    <div class="circle-btn" onclick="filterApps('media')"><span>🎞️</span><div class="circle-label">Creative</div></div>
+    <div class="circle-btn" onclick="filterApps('social')"><span>📱</span><div class="circle-label">Social Hub</div></div>
+    <div class="circle-btn" onclick="filterApps('finance')"><span>💳</span><div class="circle-label">Financial</div></div>
+    <div class="circle-btn" onclick="filterApps('gps')"><span>📡</span><div class="circle-label">GPS Track</div></div>
+    <div class="circle-btn" onclick="filterApps('util')"><span>🔄</span><div class="circle-label">Universal Tool</div></div>
+</div>
+
+<div class="app-grid" id="master-grid">
+    <div class="folder-card" onclick="runApp('cad')"><div>🏗️</div><h3>3D CAD Design</h3><p>Architecture & Civil</p></div>
+    <div class="folder-card" onclick="runApp('editor')"><div>✂️</div><h3>Pro Video Editor</h3><p>Desktop Grade</p></div>
+    <div class="folder-card" onclick="runApp('reels')"><div>🤳</div><h3>Social Reels</h3><p>Create & Share</p></div>
+    <div class="folder-card" onclick="runApp('bank')"><div>🏦</div><h3>World Bank Pro</h3><p>Accounts & Tax</p></div>
+    <div class="folder-card" onclick="runApp('gps')"><div>📍</div><h3>Ghost Tracker</h3><p>Global GPS 3D</p></div>
+    <div class="folder-card" onclick="runApp('conv')"><div>📂</div><h3>Doc Converter</h3><p>PDF, Excel, JPG</p></div>
+    <div class="folder-card" onclick="runApp('space')"><div>🚀</div><h3>Space Control</h3><p>Robotics & Aero</p></div>
+    <div class="folder-card" onclick="runApp('market')"><div>🛒</div><h3>Global Mart</h3><p>Supplier & Sales</p></div>
+</div>
+
+<div id="desktop-view">
+    <div class="top-bar">
+        <span id="app-title">Application Name</span>
+        <button onclick="exitApp()" style="background:red; color:white; border:none; padding:5px 15px; cursor:pointer;">CLOSE (X)</button>
+    </div>
+    <div id="desktop-content" style="height: 100%; width: 100%; color: #00f2fe; padding: 20px;">
+        </div>
+</div>
+
+<script>
+    // HAI AI Language & Device Logic
+    const userLang = navigator.language || 'en';
+    document.getElementById('hai-status').innerText += " | Country: Connected";
+
+    // App Launcher Logic
+    function runApp(appName) {
+        document.getElementById('desktop-view').style.display = 'block';
+        document.getElementById('app-title').innerText = "HARI GLOBAL STUDIO - " + appName.toUpperCase();
+        
+        // यह फंक्शन संबंधित 100 फाइलों में से सही फाइल लोड करेगा
+        const content = document.getElementById('desktop-content');
+        content.innerHTML = `<h1>Launching ${appName}...</h1><p>Connecting to Ghosting Server... Please wait.</p>`;
+        
+        setTimeout(() => {
+            content.innerHTML = `<div style="border: 2px dashed #00f2fe; height:80%; display:flex; align-items:center; justify-content:center;">
+                [ ${appName} का कंप्यूटर वर्जन टूल यहाँ सक्रिय है ]
+            </div>`;
+        }, 1000);
+    }
+
+    function exitApp() {
+        document.getElementById('desktop-view').style.display = 'none';
+    }
+
+    // Master Key Security Simulation
+    const masterPass = "HARI_ADMIN"; 
+    console.log("HAI: Master Key Active for all 100+ files.");
+</script>
+
+</body>
+</html>
+
