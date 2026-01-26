@@ -3,29 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HARI Supreme - Public Portal</title>
+    <title>HARI Supreme - Global Peace & Business Ecosystem</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --s-green: #27ae60; --s-gold: #f1c40f; --s-bg: #ffffff; }
         body { background-color: var(--s-bg); font-family: 'Inter', sans-serif; color: #1e293b; margin: 0; overflow-x: hidden; }
         
-        /* Premium White Cards */
-        .card-white { background: #ffffff; border: 1.5px solid #f1f5f9; border-radius: 30px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); transition: 0.3s; }
-        .card-white:hover { border-color: var(--s-gold); transform: translateY(-3px); }
+        .card-white { background: #ffffff; border: 1.5px solid #f1f5f9; border-radius: 28px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); transition: 0.3s; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .card-white:hover { border-color: var(--s-gold); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(241, 196, 15, 0.1); }
         
-        /* Golden Primary Button */
         .btn-gold { background: linear-gradient(135deg, #f1c40f, #f39c12); color: white; font-weight: 900; border-radius: 20px; padding: 16px; text-align: center; cursor: pointer; border: none; box-shadow: 0 8px 20px rgba(241, 196, 15, 0.3); width: 100%; }
         
-        /* Green Secondary Button */
-        .btn-green { background: transparent; border: 2px solid var(--s-green); color: var(--s-green); font-weight: 800; border-radius: 20px; padding: 16px; text-align: center; width: 100%; }
+        .icon-gold { font-size: 42px; margin-bottom: 12px; filter: drop-shadow(0 4px 6px rgba(241, 196, 15, 0.3)); color: var(--s-gold); }
 
-        /* Icon Styling */
-        .icon-box { font-size: 40px; margin-bottom: 12px; filter: drop-shadow(0 4px 6px rgba(241, 196, 15, 0.3)); color: var(--s-gold); }
-
-        /* App Window */
         .app-window { background: #ffffff; min-height: 100vh; width: 100%; position: fixed; top: 0; left: 0; z-index: 2000; display: none; overflow-y: auto; }
-        .app-window.active { display: block; animation: slideUp 0.4s ease-out; }
+        .app-window.active { display: block; animation: slideUp 0.4s cubic-bezier(0, 0, 0.2, 1); }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
         .status-line { background: #f0fff4; color: var(--s-green); font-size: 11px; font-weight: 900; border-bottom: 1px solid #dcfce7; }
@@ -34,27 +27,30 @@
 <body>
 
     <nav class="p-6 flex justify-between items-center sticky top-0 bg-white/90 backdrop-blur-md z-[100] border-b border-slate-50">
-        <h1 class="text-2xl font-black tracking-tight"><span class="text-green-600">HARI</span> <span class="text-yellow-500 uppercase">Supreme</span></h1>
-        <div class="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center font-black text-yellow-500 border border-slate-200">H</div>
+        <div>
+            <h1 class="text-2xl font-black tracking-tight"><span class="text-green-600">HARI</span> <span class="text-yellow-500 uppercase">Supreme</span></h1>
+            <p class="text-[8px] font-bold text-slate-400 tracking-[3px] uppercase">संसार को स्वर्ग बनाने का संकल्प</p>
+        </div>
+        <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center font-black text-yellow-500 border border-slate-200">H</div>
     </nav>
 
     <marquee class="status-line py-3 uppercase tracking-widest">
-        ● HAI AI: ग्लोबल मार्केट लाइव ● $1.2M रिवॉर्ड पूल सुरक्षित ● 12 मुख्य सेवाएं सक्रिय ● सुरक्षित पीयर-टू-पीयर पेमेंट चालू है ●
+        ● 1. SOCIAL MEDIA ● 2. FREELANCING ● 3. CHATTING & GAMING ● 4. DESIGN HUB ● 5. SOFTWARE & DEV ● 6. OFFICE & CONVERTER ● 7. BANKING CORE ● 8. E-COMMERCE ● 9. EDUCATION ● 10. PAYMENT GATEWAY ● 11. TICKET BOOKING ● 12. TENDERS & B2B ●
     </marquee>
 
     <div class="container mx-auto px-5 py-8 pb-32">
         
-        <div class="card-white mb-10 border-l-8 border-l-yellow-500">
-            <p class="text-[10px] text-slate-400 font-black uppercase tracking-[4px] mb-2">My Wallet</p>
+        <div class="card-white mb-10 border-l-8 border-l-yellow-500 items-start">
+            <p class="text-[10px] text-slate-400 font-black uppercase tracking-[4px] mb-2">Public Welfare Wallet</p>
             <h2 class="text-5xl font-black text-slate-900 mb-8">$1,250,480.00</h2>
-            <div class="flex gap-4">
-                <button class="btn-gold" onclick="openApp('Deposit', '💳')">DEPOSIT</button>
-                <button class="btn-green" onclick="openApp('Withdraw', '🏦')">WITHDRAW</button>
+            <div class="grid grid-cols-2 gap-4 w-full">
+                <button class="btn-gold" onclick="openApp('Donation', '🤝')">SUPPORT MISSION</button>
+                <button class="border-2 border-green-600 text-green-600 font-black rounded-2xl py-4" onclick="openApp('Banking', '🏦')">MY BANKING</button>
             </div>
         </div>
 
         <h3 class="text-xs font-black mb-8 text-slate-400 uppercase tracking-[4px] flex items-center gap-3">
-            <span class="w-10 h-[2px] bg-green-500"></span> Public Ecosystem
+            <span class="w-10 h-[2px] bg-green-500"></span> 12 महा-सेवाएं (World-Class Services)
         </h3>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="service-grid">
@@ -62,61 +58,76 @@
     </div>
 
     <div id="app-view" class="app-window">
-        <div class="sticky top-0 bg-white border-b p-6 flex justify-between items-center">
+        <div class="sticky top-0 bg-white border-b p-6 flex justify-between items-center shadow-sm">
             <div class="flex items-center gap-4">
                 <span id="app-icon" class="text-4xl"></span>
-                <h2 id="app-name" class="font-black text-2xl text-slate-900 uppercase">Service</h2>
+                <h2 id="app-name" class="font-black text-xl text-slate-900 uppercase">Service</h2>
             </div>
-            <button onclick="closeApp()" class="bg-slate-900 text-white px-8 py-3 rounded-2xl font-black text-xs uppercase">Back</button>
+            <button onclick="closeApp()" class="bg-slate-900 text-white px-8 py-3 rounded-2xl font-black text-xs uppercase">Back to Heaven</button>
         </div>
         <div id="app-content" class="p-8 container mx-auto"></div>
     </div>
 
     <script>
-        // 12 Services list
-        const publicServices = [
-            {n: "Market", i: "🛒"}, {n: "Social", i: "📱"}, 
-            {n: "Freelance", i: "💼"}, {n: "Banking", i: "🏦"}, 
-            {n: "Tenders", i: "🏛️"}, {n: "Software", i: "💻"}, 
-            {n: "Education", i: "🎓"}, {n: "Travel", i: "🎫"},
-            {n: "Security", i: "🛡️"}, {n: "Cloud", i: "☁️"},
-            {n: "Analytics", i: "📊"}, {n: "Settings", i: "⚙️"}
+        const services = [
+            { id: 1, n: "Social Media", i: "📱", d: "Connect & Spread Peace" },
+            { id: 2, n: "Freelancing", i: "💼", d: "Jobs & Opportunities" },
+            { id: 3, n: "Connect & Play", i: "🎮", d: "Chat, Video, Gaming" },
+            { id: 4, n: "Design Hub", i: "🎨", d: "All types of Designs" },
+            { id: 5, n: "Software Dev", i: "💻", d: "Web, App & Tools" },
+            { id: 6, n: "Office Suite", i: "📂", d: "ERP, CRM, PDF Tools" },
+            { id: 7, n: "Banking Core", i: "🏦", d: "Secure Global Finance" },
+            { id: 8, n: "Ecommerce", i: "🛒", d: "Multi-vendor Market" },
+            { id: 9, n: "Education", i: "🎓", d: "Learning & Growth" },
+            { id: 10, n: "Payment", i: "💳", d: "Universal Gateway" },
+            { id: 11, n: "Bookings", i: "🎫", d: "Travel & Tickets" },
+            { id: 12, n: "Tenders & B2B", i: "🏛️", d: "Govt & B2B Contracts" }
         ];
 
         function render() {
             const grid = document.getElementById('service-grid');
-            grid.innerHTML = publicServices.map(s => `
-                <div onclick="openApp('${s.n}', '${s.i}')" class="card-white text-center cursor-pointer active:scale-95">
-                    <div class="icon-box">${s.i}</div>
-                    <div class="text-xs font-black uppercase tracking-widest text-slate-800">${s.n}</div>
-                    <div class="text-[9px] text-green-600 font-bold mt-3 uppercase">Available</div>
+            grid.innerHTML = services.map(s => `
+                <div onclick="openApp('${s.n}', '${s.i}', ${s.id})" class="card-white text-center cursor-pointer active:scale-95">
+                    <div class="icon-gold">${s.i}</div>
+                    <div class="text-xs font-black uppercase tracking-tight text-slate-800 mb-1">${s.id}. ${s.n}</div>
+                    <div class="text-[8px] text-green-600 font-bold uppercase">${s.d}</div>
                 </div>
             `).join('');
         }
 
-        function openApp(name, icon) {
+        function openApp(name, icon, id) {
             document.body.style.overflow = 'hidden';
             document.getElementById('app-view').classList.add('active');
             document.getElementById('app-name').innerText = name;
             document.getElementById('app-icon').innerText = icon;
             
-            let html = "";
-            if(name === 'Security') {
-                html = `<div class="bg-slate-50 p-6 rounded-3xl border border-slate-100">
-                    <h3 class="font-black text-xl mb-4 text-green-600">User Security Policy</h3>
-                    <p class="text-sm text-slate-600 font-medium">आपका डेटा एंड-टू-एंड एन्क्रिप्टेड है। वर्ज़न 5.1.x पर सभी सुरक्षा मानक लागू हैं।</p>
-                    <div class="mt-6 p-4 bg-white rounded-2xl border border-slate-100 text-xs font-bold uppercase">
-                        System Status: ✅ Secured by HAI AI
+            let content = "";
+            if(id === 6) {
+                content = `<div class="grid grid-cols-2 gap-4">
+                    <div class="p-6 bg-slate-50 rounded-3xl border text-center">📄<br><b>PDF to JPG</b></div>
+                    <div class="p-6 bg-slate-50 rounded-3xl border text-center">📝<br><b>CV Maker</b></div>
+                    <div class="p-6 bg-slate-50 rounded-3xl border text-center">📊<br><b>ERP System</b></div>
+                    <div class="p-6 bg-slate-50 rounded-3xl border text-center">📑<br><b>CRM Tool</b></div>
+                </div>`;
+            } else if(id === 12) {
+                content = `<div class="space-y-4">
+                    <div class="p-4 border-l-4 border-yellow-500 bg-slate-50">
+                        <h4 class="font-black">Govt. Smart City Project</h4>
+                        <p class="text-xs text-slate-500">Sector: Infrastructure | Status: Open</p>
+                    </div>
+                    <div class="p-4 border-l-4 border-green-500 bg-slate-50">
+                        <h4 class="font-black">B2B Manufacturing Supply</h4>
+                        <p class="text-xs text-slate-500">Connect with 500+ Vendors</p>
                     </div>
                 </div>`;
             } else {
-                html = `<div class="text-center py-20">
+                content = `<div class="text-center py-20">
                     <div class="text-9xl mb-8 opacity-10">${icon}</div>
-                    <h3 class="text-2xl font-black text-slate-900">${name} Portal</h3>
-                    <p class="text-slate-400 font-bold uppercase tracking-[4px] mt-4">Connecting to Global Node...</p>
+                    <h3 class="text-3xl font-black text-slate-800">${name} System</h3>
+                    <p class="text-slate-400 font-bold uppercase tracking-[4px] mt-4">Heavenly Service Initializing...</p>
                 </div>`;
             }
-            document.getElementById('app-content').innerHTML = html;
+            document.getElementById('app-content').innerHTML = content;
         }
 
         function closeApp() { 
