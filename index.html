@@ -1,111 +1,96 @@
 <!DOCTYPE html>
-<html lang="auto">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>HARI GLOBAL STUDIO | HAI (Hari AI) Universal System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HARI GLOBAL STUDIO - HAI AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { --neon: #00f2fe; --bg: #030303; --card: #111; }
-        body { margin: 0; background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
-        
-        /* Universal Language Header */
-        header { padding: 20px; text-align: center; border-bottom: 1px solid var(--neon); background: rgba(0,0,0,0.9); position: sticky; top: 0; z-index: 100; }
-        
-        /* Service Circles (The Curcil) */
-        .service-belt { display: flex; overflow-x: auto; padding: 20px; gap: 20px; scrollbar-width: none; }
-        .circle-btn { 
-            min-width: 120px; height: 120px; border-radius: 50%; background: var(--card);
-            border: 2px solid var(--neon); display: flex; flex-direction: column;
-            align-items: center; justify-content: center; cursor: pointer; transition: 0.4s;
-            box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+        :root { --hari-green: #2ecc71; --hari-gold: #f1c40f; }
+        body { background-color: #ffffff; font-family: 'Segoe UI', sans-serif; }
+        .golden-btn { 
+            background: linear-gradient(45deg, #f1c40f, #f39c12);
+            color: white; font-weight: bold; border-radius: 50px;
+            transition: 0.3s; box-shadow: 0 4px 15px rgba(241, 196, 15, 0.4);
         }
-        .circle-btn:hover { transform: scale(1.1) rotate(10deg); box-shadow: 0 0 25px var(--neon); }
-        .circle-btn span { font-size: 40px; }
-        .circle-label { font-size: 11px; margin-top: 8px; text-decoration: none; font-weight: bold; }
-
-        /* The App Folders (Infinite Grid) */
-        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 25px; padding: 40px; }
-        .folder-card { 
-            background: var(--card); border-radius: 15px; padding: 20px; text-align: center;
-            cursor: pointer; border: 1px solid #333; transition: 0.3s;
-        }
-        .folder-card:hover { border-color: var(--neon); background: #1a1a1a; }
-        .folder-icon { width: 60px; height: 60px; margin-bottom: 10px; }
-
-        /* Computer Mode Window */
-        #desktop-view { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: black; z-index: 1000; 
-        }
-        .top-bar { background: #222; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
-        iframe { width: 100%; height: calc(100% - 50px); border: none; }
+        .golden-btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(241, 196, 15, 0.6); }
+        .green-border { border-left: 5px solid var(--hari-green); }
+        .icon-box { font-size: 2.5rem; color: var(--hari-green); }
     </style>
 </head>
 <body>
 
-<header>
-    <h1 style="letter-spacing: 5px; color: var(--neon);">HARI GLOBAL STUDIO</h1>
-    <div id="hai-status">HAI (Hari AI) | Language: Auto-Detect | Security: Ghost Mode ON</div>
-</header>
-
-<div class="service-belt">
-    <div class="circle-btn" onclick="filterApps('infrastructure')"><span>🏗️</span><div class="circle-label">Engineering</div></div>
-    <div class="circle-btn" onclick="filterApps('media')"><span>🎞️</span><div class="circle-label">Creative</div></div>
-    <div class="circle-btn" onclick="filterApps('social')"><span>📱</span><div class="circle-label">Social Hub</div></div>
-    <div class="circle-btn" onclick="filterApps('finance')"><span>💳</span><div class="circle-label">Financial</div></div>
-    <div class="circle-btn" onclick="filterApps('gps')"><span>📡</span><div class="circle-label">GPS Track</div></div>
-    <div class="circle-btn" onclick="filterApps('util')"><span>🔄</span><div class="circle-label">Universal Tool</div></div>
-</div>
-
-<div class="app-grid" id="master-grid">
-    <div class="folder-card" onclick="runApp('cad')"><div>🏗️</div><h3>3D CAD Design</h3><p>Architecture & Civil</p></div>
-    <div class="folder-card" onclick="runApp('editor')"><div>✂️</div><h3>Pro Video Editor</h3><p>Desktop Grade</p></div>
-    <div class="folder-card" onclick="runApp('reels')"><div>🤳</div><h3>Social Reels</h3><p>Create & Share</p></div>
-    <div class="folder-card" onclick="runApp('bank')"><div>🏦</div><h3>World Bank Pro</h3><p>Accounts & Tax</p></div>
-    <div class="folder-card" onclick="runApp('gps')"><div>📍</div><h3>Ghost Tracker</h3><p>Global GPS 3D</p></div>
-    <div class="folder-card" onclick="runApp('conv')"><div>📂</div><h3>Doc Converter</h3><p>PDF, Excel, JPG</p></div>
-    <div class="folder-card" onclick="runApp('space')"><div>🚀</div><h3>Space Control</h3><p>Robotics & Aero</p></div>
-    <div class="folder-card" onclick="runApp('market')"><div>🛒</div><h3>Global Mart</h3><p>Supplier & Sales</p></div>
-</div>
-
-<div id="desktop-view">
-    <div class="top-bar">
-        <span id="app-title">Application Name</span>
-        <button onclick="exitApp()" style="background:red; color:white; border:none; padding:5px 15px; cursor:pointer;">CLOSE (X)</button>
-    </div>
-    <div id="desktop-content" style="height: 100%; width: 100%; color: #00f2fe; padding: 20px;">
+    <nav class="p-6 shadow-md flex justify-between items-center bg-white sticky top-0 z-50">
+        <h1 class="text-3xl font-black text-green-600 tracking-tighter">HARI <span class="text-yellow-500">GLOBAL</span> STUDIO</h1>
+        <div>
+            <button onclick="showModal('login')" class="golden-btn px-6 py-2 mr-2">लॉगिन</button>
+            <button onclick="showModal('signup')" class="bg-green-600 text-white px-6 py-2 rounded-full font-bold">साइनअप</button>
         </div>
-</div>
+    </nav>
 
-<script>
-    // HAI AI Language & Device Logic
-    const userLang = navigator.language || 'en';
-    document.getElementById('hai-status').innerText += " | Country: Connected";
+    <header class="text-center py-20 bg-gray-50">
+        <h2 class="text-5xl font-bold text-gray-800">दुनिया को <span class="text-green-600">स्वर्ग</span> बनाने का मिशन</h2>
+        <p class="mt-4 text-xl text-gray-600">HAI (Hari AI) द्वारा संचालित 12 महा-व्यवसाय</p>
+    </header>
 
-    // App Launcher Logic
-    function runApp(appName) {
-        document.getElementById('desktop-view').style.display = 'block';
-        document.getElementById('app-title').innerText = "HARI GLOBAL STUDIO - " + appName.toUpperCase();
-        
-        // यह फंक्शन संबंधित 100 फाइलों में से सही फाइल लोड करेगा
-        const content = document.getElementById('desktop-content');
-        content.innerHTML = `<h1>Launching ${appName}...</h1><p>Connecting to Ghosting Server... Please wait.</p>`;
-        
-        setTimeout(() => {
-            content.innerHTML = `<div style="border: 2px dashed #00f2fe; height:80%; display:flex; align-items:center; justify-content:center;">
-                [ ${appName} का कंप्यूटर वर्जन टूल यहाँ सक्रिय है ]
-            </div>`;
-        }, 1000);
-    }
+    <section class="container mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <script>
+                const businesses = [
+                    {n: "सोशल मीडिया", i: "📱", d: "Recharge Model"},
+                    {n: "फ्रीलांसिंग", i: "💼", d: "Commission Model"},
+                    {n: "डेटिंग/चैट", i: "💖", d: "Coins Recharge"},
+                    {n: "डिज़ाइन स्टूडियो", i: "🎨", d: "Subscription"},
+                    {n: "सॉफ्टवेयर देव", i: "💻", d: "Project Model"},
+                    {n: "ऑफिस ERP/CRM", i: "📊", d: "SaaS Model"},
+                    {n: "बैंकिंग कोर", i: "🏦", d: "Safe Vault"},
+                    {n: "ई-कॉमर्स", i: "🛒", d: "Multi-Vendor"},
+                    {n: "शिक्षा (Edu)", i: "🎓", d: "Free & Premium"},
+                    {n: "पेमेंट गेटवे", i: "💳", d: "Global Access"},
+                    {n: "टिकट बुकिंग", i: "🎫", d: "Instant Booking"},
+                    {n: "B2B टेंडर्स", i: "🏛️", d: "Govt Contracts"}
+                ];
+                businesses.forEach(b => {
+                    document.write(`
+                        <div class="p-8 bg-white shadow-xl rounded-2xl green-border hover:shadow-2xl transition cursor-pointer text-center">
+                            <div class="icon-box mb-4">${b.i}</div>
+                            <h3 class="text-xl font-bold text-gray-800">${b.n}</h3>
+                            <p class="text-gray-500 text-sm mb-4">${b.d}</p>
+                            <button class="golden-btn w-full py-2">खोलें</button>
+                        </div>
+                    `);
+                });
+            </script>
+        </div>
+    </section>
 
-    function exitApp() {
-        document.getElementById('desktop-view').style.display = 'none';
-    }
+    <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-[100]">
+        <div class="bg-white p-10 rounded-3xl w-full max-w-md shadow-2xl relative">
+            <h2 id="modal-title" class="text-3xl font-bold text-green-600 mb-6">साइनअप</h2>
+            
+            <input type="text" placeholder="मोबाइल / ईमेल" class="w-full p-4 border rounded-xl mb-4 outline-green-500">
+            <button class="w-full bg-green-600 text-white py-4 rounded-xl font-bold mb-4">OTP प्राप्त करें</button>
+            
+            <div class="flex gap-2 mb-4">
+                <input type="text" maxlength="1" class="w-1/4 p-4 border text-center text-2xl font-bold rounded-xl outline-green-500">
+                <input type="text" maxlength="1" class="w-1/4 p-4 border text-center text-2xl font-bold rounded-xl outline-green-500">
+                <input type="text" maxlength="1" class="w-1/4 p-4 border text-center text-2xl font-bold rounded-xl outline-green-500">
+                <input type="text" maxlength="1" class="w-1/4 p-4 border text-center text-2xl font-bold rounded-xl outline-green-500">
+            </div>
 
-    // Master Key Security Simulation
-    const masterPass = "HARI_ADMIN"; 
-    console.log("HAI: Master Key Active for all 100+ files.");
-</script>
+            <button onclick="window.location.href='#dashboard'" class="golden-btn w-full py-4 text-lg">वेरिफाई और लॉगिन</button>
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 text-2xl">×</button>
+        </div>
+    </div>
+
+    <script>
+        function showModal(type) {
+            document.getElementById('modal-overlay').classList.remove('hidden');
+            document.getElementById('modal-title').innerText = type === 'login' ? 'लॉगिन' : 'नया अकाउंट';
+        }
+        function closeModal() { document.getElementById('modal-overlay').classList.add('hidden'); }
+    </script>
 
 </body>
-</html>
-
+                    </html>
+    
