@@ -44,8 +44,8 @@
             <p class="text-[10px] text-slate-400 font-black uppercase tracking-[4px] mb-2">Public Welfare Wallet</p>
             <h2 class="text-5xl font-black text-slate-900 mb-8">$1,250,480.00</h2>
             <div class="grid grid-cols-2 gap-4 w-full">
-                <button class="btn-gold" onclick="openApp('Donation', '🤝')">SUPPORT MISSION</button>
-                <button class="border-2 border-green-600 text-green-600 font-black rounded-2xl py-4" onclick="openApp('Banking', '🏦')">MY BANKING</button>
+                <button class="btn-gold" onclick="openApp('Support Mission', '🤝', 101)">SUPPORT MISSION</button>
+                <button class="border-2 border-green-600 text-green-600 font-black rounded-2xl py-4" onclick="openApp('Banking Core', '🏦', 7)">MY BANKING</button>
             </div>
         </div>
 
@@ -53,8 +53,7 @@
             <span class="w-10 h-[2px] bg-green-500"></span> 12 महा-सेवाएं (World-Class Services)
         </h3>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="service-grid">
-            </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="service-grid"></div>
     </div>
 
     <div id="app-view" class="app-window">
@@ -102,21 +101,89 @@
             document.getElementById('app-icon').innerText = icon;
             
             let content = "";
-            if(id === 6) {
-                content = `<div class="grid grid-cols-2 gap-4">
-                    <div class="p-6 bg-slate-50 rounded-3xl border text-center">📄<br><b>PDF to JPG</b></div>
-                    <div class="p-6 bg-slate-50 rounded-3xl border text-center">📝<br><b>CV Maker</b></div>
-                    <div class="p-6 bg-slate-50 rounded-3xl border text-center">📊<br><b>ERP System</b></div>
-                    <div class="p-6 bg-slate-50 rounded-3xl border text-center">📑<br><b>CRM Tool</b></div>
+
+            if (id === 1) { // Social Media
+                content = `<div class="space-y-4">
+                    <div class="p-4 bg-slate-50 rounded-3xl border">
+                        <textarea class="w-full bg-transparent p-2 outline-none" placeholder="संसार के लिए अपना संदेश लिखें..."></textarea>
+                        <button class="btn-gold mt-2 w-max px-6 py-2">POST NOW</button>
+                    </div>
+                    <div class="p-4 border rounded-3xl bg-white"><div class="font-black mb-1">Hari AI (HAI)</div><p class="text-sm">Welcome to the era of peace and digital innovation.</p></div>
                 </div>`;
-            } else if(id === 12) {
+            } else if (id === 2) { // Freelancing
+                content = `<div class="grid grid-cols-1 gap-4">
+                    <div class="p-4 border rounded-3xl flex justify-between items-center"><div><b>Logo Designer</b><p class="text-xs text-green-600">$40/hr</p></div><button class="bg-slate-900 text-white px-4 py-2 rounded-xl text-xs">Apply</button></div>
+                    <div class="p-4 border rounded-3xl flex justify-between items-center"><div><b>Content Writer</b><p class="text-xs text-green-600">$25/hr</p></div><button class="bg-slate-900 text-white px-4 py-2 rounded-xl text-xs">Apply</button></div>
+                </div>`;
+            } else if (id === 3) { // Connect & Play
+                content = `<div class="grid grid-cols-2 gap-4">
+                    <div class="p-6 bg-slate-900 text-white rounded-3xl text-center col-span-2">💬 <b>Global Live Chat</b></div>
+                    <div class="p-6 bg-slate-50 rounded-3xl border text-center font-black">🕹️ Space Race</div>
+                    <div class="p-6 bg-slate-50 rounded-3xl border text-center font-black">🧩 Brain Tease</div>
+                </div>`;
+            } else if (id === 4) { // Design Hub
+                content = `<div class="grid grid-cols-2 gap-4">
+                    <div class="p-6 bg-slate-50 rounded-3xl border text-center">🎨 <b>AI Canvas</b></div>
+                    <div class="p-6 bg-slate-50 rounded-3xl border text-center">📐 <b>Mockup Gen</b></div>
+                    <div class="p-6 bg-slate-50 rounded-3xl border text-center col-span-2"><b>MY PORTFOLIO</b></div>
+                </div>`;
+            } else if (id === 5) { // Software Dev
+                content = `<div class="bg-slate-900 text-green-400 p-6 rounded-3xl font-mono text-xs">
+                    <p>> initializing HAI_OS...</p>
+                    <p>> loading developer_tools...</p>
+                    <p>> ready for coding.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <button class="p-4 border rounded-2xl font-bold">Terminal</button>
+                    <button class="p-4 border rounded-2xl font-bold">API Console</button>
+                </div>`;
+            } else if (id === 6) { // Office Suite
+                content = `<div class="grid grid-cols-2 gap-4">
+                    <div class="p-6 bg-slate-50 rounded-3xl border text-center">📄 <b>PDF Tool</b></div>
+                    <div class="p-6 bg-slate-50 rounded-3xl border text-center">📝 <b>CV Maker</b></div>
+                    <div class="p-6 bg-slate-50 rounded-3xl border text-center">📊 <b>ERP Docs</b></div>
+                    <div class="p-6 bg-slate-50 rounded-3xl border text-center">📑 <b>CRM Base</b></div>
+                </div>`;
+            } else if (id === 7) { // Banking Core
+                content = `<div class="bg-gradient-to-r from-slate-800 to-slate-900 p-6 rounded-3xl text-white mb-6">
+                    <p class="text-[10px] opacity-60">BALANCE</p>
+                    <h3 class="text-3xl font-black">$45,200.00</h3>
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <button class="p-3 bg-slate-50 rounded-2xl text-[10px] font-black uppercase">Send</button>
+                    <button class="p-3 bg-slate-50 rounded-2xl text-[10px] font-black uppercase">History</button>
+                    <button class="p-3 bg-slate-50 rounded-2xl text-[10px] font-black uppercase">Cards</button>
+                </div>`;
+            } else if (id === 8) { // Ecommerce
+                content = `<div class="grid grid-cols-2 gap-4">
+                    <div class="border rounded-3xl p-2"><div class="h-24 bg-slate-100 rounded-2xl mb-2"></div><p class="text-[10px] font-bold">Smart Watch</p><p class="text-xs font-black">$199</p></div>
+                    <div class="border rounded-3xl p-2"><div class="h-24 bg-slate-100 rounded-2xl mb-2"></div><p class="text-[10px] font-bold">Peace T-Shirt</p><p class="text-xs font-black">$29</p></div>
+                </div>`;
+            } else if (id === 9) { // Education
+                content = `<div class="space-y-4">
+                    <div class="p-4 bg-slate-50 rounded-3xl border">📚 <b>Digital Marketing Course</b></div>
+                    <div class="p-4 bg-slate-50 rounded-3xl border">🐍 <b>Python Mastery</b></div>
+                    <div class="p-4 bg-slate-50 rounded-3xl border">🧘 <b>Spiritual Wisdom</b></div>
+                </div>`;
+            } else if (id === 10) { // Payment
+                content = `<div class="text-center py-10">
+                    <div class="w-32 h-32 bg-slate-100 rounded-full mx-auto flex items-center justify-center text-4xl mb-4">📸</div>
+                    <h3 class="font-black">SCAN QR CODE</h3>
+                    <button class="btn-gold mt-6">OPEN SCANNER</button>
+                </div>`;
+            } else if (id === 11) { // Bookings
+                content = `<div class="space-y-4">
+                    <div class="flex gap-2"><button class="btn-gold py-2 text-xs">Flights</button><button class="border px-4 py-2 rounded-2xl text-xs font-bold">Hotels</button></div>
+                    <div class="p-6 border-2 border-dashed rounded-3xl text-center text-slate-400">Search Destinations...</div>
+                </div>`;
+            } else if (id === 12) { // Tenders
                 content = `<div class="space-y-4">
                     <div class="p-4 border-l-4 border-yellow-500 bg-slate-50">
                         <h4 class="font-black">Govt. Smart City Project</h4>
                         <p class="text-xs text-slate-500">Sector: Infrastructure | Status: Open</p>
                     </div>
                     <div class="p-4 border-l-4 border-green-500 bg-slate-50">
-                        <h4 class="font-black">B2B Manufacturing Supply</h4>
+                        <h4 class="font-black">B2B Supply Chain</h4>
                         <p class="text-xs text-slate-500">Connect with 500+ Vendors</p>
                     </div>
                 </div>`;
@@ -127,6 +194,7 @@
                     <p class="text-slate-400 font-bold uppercase tracking-[4px] mt-4">Heavenly Service Initializing...</p>
                 </div>`;
             }
+            
             document.getElementById('app-content').innerHTML = content;
         }
 
