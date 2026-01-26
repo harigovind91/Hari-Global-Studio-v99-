@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASTER CONTROL - HARI SUPREME BACKEND</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <style>
+        body { background: #010409; color: #c9d1d9; font-family: 'Segoe UI', sans-serif; }
+        .sidebar { width: 260px; height: 100vh; background: #0d1117; border-right: 1px solid #30363d; position: fixed; }
+        .main-content { margin-left: 260px; padding: 40px; }
+        .stat-card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; transition: 0.3s; }
+        .stat-card:hover { border-color: #58a6ff; }
+        .node-active { color: #238636; animation: blink 2s infinite; }
+        @keyframes blink { 50% { opacity: 0.5; } }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .admin-table th, .admin-table td { text-align: left; padding: 12px; border-bottom: 1px solid #30363d; }
+        .status-pill { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+        #auth-overlay { position: fixed; inset: 0; background: #010409; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+    <div id="auth-overlay">
+        <div class="bg-[#161b22] p-10 rounded-2xl border border-[#30363d] text-center w-96">
+            <h2 class="text-2xl font-black text-yellow-500 mb-6 tracking-tighter">HARI BACKEND AUTH</h2>
+            <input type="password" id="master-key" placeholder="Enter Security Key" class="w-full p-4 bg-[#0d1117] border border-[#30363d] rounded-xl mb-4 text-center outline-none focus:border-yellow-500">
+            <button onclick="checkAuth()" class="w-full bg-yellow-500 text-black font-bold py-4 rounded-xl hover:bg-yellow-400 transition">ACCESS SYSTEM</button>
+            <p id="err" class="text-red-500 mt-4 text-xs hidden">Unauthorized Access Attempt Logged!</p>
+        </div>
+    </div>
+
+    <div class="sidebar p-6">
+        <h1 class="text-xl font-black text-green-500 mb-10">HARI <span class="text-white">OS</span></h1>
+        <nav class="space-y-4">
+            <a href="#" class="block text-blue-400 font-bold">● Global Dashboard</a>
+            <a href="#" class="block hover:text-white">● User Management</a>
+            <a href="#" class="block hover:text-white">● Financial Ledger</a>
+            <a href="#" class="block hover:text-white">● 5% Commission Engine</a>
+            <a href="#" class="block hover:text-white">● Node Terminal</a>
+            <a href="#" class="block hover:text-white">● Security Logs</a>
+        </nav>
+        <div class="absolute bottom-10 left-6 text-[10px] text-gray-500">
+            SYSTEM VERSION: 4.0.2-STABLE<br>SERVER: TOKYO-MESH-01
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header class="flex justify-between items-center mb-10">
+            <h2 class="text-3xl font-bold">Global Overview</h2>
+            <div class="flex gap-4">
+                <div class="text-right">
+                    <p class="text-xs text-gray-500 uppercase">Server Load</p>
+                    <p class="text-green-500 font-bold">12% - Optimal</p>
+                </div>
+                <button onclick="location.reload()" class="bg-[#21262d] p-3 rounded-lg border border-[#30363d]">Refresh Data</button>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+            <div class="stat-card">
+                <p class="text-gray-400 text-sm">Total Revenue</p>
+                <h3 class="text-3xl font-black text-white">$1,250,480</h3>
+                <p class="text-green-500 text-xs mt-2">↑ 12% from yesterday</p>
+            </div>
+            <div class="stat-card">
+                <p class="text-gray-400 text-sm">Active Commission (5%)</p>
+                <h3 class="text-3xl font-black text-yellow-500">$62,524</h3>
+                <p class="text-gray-500 text-xs mt-2">Ready for withdrawal</p>
+            </div>
+            <div class="stat-card">
+                <p class="text-gray-400 text-sm">Connected Users</p>
+                <h3 class="text-3xl font-black text-white">1,842,091</h3>
+                <p class="text-blue-500 text-xs mt-2">● 45k Online Now</p>
+            </div>
+            <div class="stat-card">
+                <p class="text-gray-400 text-sm">System Health</p>
+                <h3 class="text-3xl font-black text-green-500">99.9%</h3>
+                <p class="text-gray-500 text-xs mt-2">All 12 Services Live</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="stat-card">
+                <h4 class="font-bold mb-6">Global Traffic Nodes</h4>
+                <div id="admin-map" style="width: 100%; height: 350px;"></div>
+            </div>
+
+            <div class="stat-card">
+                <h4 class="font-bold mb-4">Node Master (1000/1000 Files Synchronized)</h4>
+                <div class="h-[300px] overflow-y-auto pr-2" id="node-list">
+                    </div>
+            </div>
+        </div>
+
+        <div class="stat-card mt-8">
+            <h4 class="font-bold mb-4">Live Transaction Ledger (Global)</h4>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>User</th>
+                        <th>Service</th>
+                        <th>Amount</th>
+                        <th>5% Fee</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="ledger-data">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // 1. AUTH LOGIC
+        function checkAuth() {
+            const key = document.getElementById('master-key').value;
+            if(key === "HARI-VAULT-2026") {
+                document.getElementById('auth-overlay').style.display = 'none';
+                initBackend();
+            } else {
+                document.getElementById('err').classList.remove('hidden');
+                speak("Access Denied. Security protocol engaged.");
+            }
+        }
+
+        // 2. DATA INJECTION
+        function initBackend() {
+            // Load Files
+            const nodeList = document.getElementById('node-list');
+            for(let i=1; i<=1000; i++) {
+                nodeList.innerHTML += `
+                    <div class="flex justify-between items-center p-3 border-b border-[#30363d] text-xs">
+                        <span class="font-mono text-gray-400">SRV-NODE-${i.toString().padStart(4, '0')}</span>
+                        <span class="status-pill bg-green-500/10 text-green-500">ENCRYPTED</span>
+                        <button class="text-blue-400 hover:underline">RE-SYNC</button>
+                    </div>
+                `;
+            }
+
+            // Load Ledger
+            const ledger = document.getElementById('ledger-data');
+            const services = ['Market', 'Banking', 'Freelance', 'Dating'];
+            for(let j=0; j<10; j++) {
+                let amt = Math.floor(Math.random() * 5000) + 100;
+                let fee = (amt * 0.05).toFixed(2);
+                ledger.innerHTML += `
+                    <tr>
+                        <td class="font-mono text-gray-500">#TRX-${Math.random().toString(36).substr(2, 9).toUpperCase()}</td>
+                        <td>User_${Math.floor(Math.random()*9000)}</td>
+                        <td>${services[Math.floor(Math.random()*services.length)]}</td>
+                        <td class="font-bold">$${amt}</td>
+                        <td class="text-yellow-500 font-bold">$${fee}</td>
+                        <td><span class="status-pill bg-green-500 text-black">COMPLETED</span></td>
+                    </tr>
+                `;
+            }
+
+            initMap();
+            speak("Backend System Synchronized. Welcome Master Hari.");
+        }
+
+        function initMap() {
+            var chart = echarts.init(document.getElementById('admin-map'));
+            chart.setOption({
+                backgroundColor: 'transparent',
+                tooltip: { trigger: 'item' },
+                series: [{
+                    type: 'map',
+                    map: 'world',
+                    itemStyle: { areaColor: '#0d1117', borderColor: '#30363d' },
+                    emphasis: { itemStyle: { areaColor: '#238636' } },
+                    data: [ {name: 'United States', value: 40}, {name: 'India', value: 80}, {name: 'Japan', value: 30} ]
+                }]
+            });
+        }
+
+        function speak(t) {
+            const m = new SpeechSynthesisUtterance(t);
+            m.rate = 1.1;
+            window.speechSynthesis.speak(m);
+        }
+    </script>
+</body>
+</html>
