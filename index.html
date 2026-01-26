@@ -2,95 +2,156 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HARI GLOBAL STUDIO - HAI AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HARI SUPREME - GLOBAL EMPIRE</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    
     <style>
-        :root { --hari-green: #2ecc71; --hari-gold: #f1c40f; }
-        body { background-color: #ffffff; font-family: 'Segoe UI', sans-serif; }
-        .golden-btn { 
-            background: linear-gradient(45deg, #f1c40f, #f39c12);
-            color: white; font-weight: bold; border-radius: 50px;
-            transition: 0.3s; box-shadow: 0 4px 15px rgba(241, 196, 15, 0.4);
-        }
-        .golden-btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(241, 196, 15, 0.6); }
-        .green-border { border-left: 5px solid var(--hari-green); }
-        .icon-box { font-size: 2.5rem; color: var(--hari-green); }
+        :root { --hari-green: #2ecc71; --hari-gold: #f1c40f; --hari-dark: #020617; }
+        body { background: var(--hari-dark); font-family: 'Inter', sans-serif; color: white; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; transition: 0.3s; }
+        .active-card { border: 1px solid var(--hari-green); box-shadow: 0 0 15px rgba(46, 204, 113, 0.2); }
+        .golden-btn { background: linear-gradient(45deg, #f1c40f, #f39c12); color: white; font-weight: bold; border-radius: 16px; cursor: pointer; transition: 0.3s; }
+        .golden-btn:active { transform: scale(0.95); }
+
+        .app-window { background: #fdfdfd; color: #1e293b; min-height: 100vh; width: 100%; position: fixed; top: 0; left: 0; z-index: 1000; overflow-y: auto; display: none; }
+        .app-window.active { display: block; animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+        .service-icon { font-size: 2.5rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
+        marquee { background: rgba(46, 204, 113, 0.1); color: #2ecc71; padding: 5px; font-weight: bold; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <nav class="p-6 shadow-md flex justify-between items-center bg-white sticky top-0 z-50">
-        <h1 class="text-3xl font-black text-green-600 tracking-tighter">HARI <span class="text-yellow-500">GLOBAL</span> STUDIO</h1>
-        <div>
-            <button onclick="showModal('login')" class="golden-btn px-6 py-2 mr-2">लॉगिन</button>
-            <button onclick="showModal('signup')" class="bg-green-600 text-white px-6 py-2 rounded-full font-bold">साइनअप</button>
-        </div>
+    <nav class="p-4 flex justify-between items-center sticky top-0 z-[100] bg-slate-950/90 border-b border-white/5 backdrop-blur-lg">
+        <h1 class="text-xl font-black text-green-500" onclick="location.reload()">HARI <span class="text-yellow-500 tracking-widest">SUPREME</span></h1>
+        <div class="flex items-center gap-3">
+            <div id="google_translate_element" class="scale-90"></div>
+            </div>
     </nav>
 
-    <header class="text-center py-20 bg-gray-50">
-        <h2 class="text-5xl font-bold text-gray-800">दुनिया को <span class="text-green-600">स्वर्ग</span> बनाने का मिशन</h2>
-        <p class="mt-4 text-xl text-gray-600">HAI (Hari AI) द्वारा संचालित 12 महा-व्यवसाय</p>
-    </header>
+    <marquee>● HAI AI: Global mesh nodes active (99.9%) ● Fast & Secure Payments Enabled ● New Global Projects Added ● System Status: Secure</marquee>
 
-    <section class="container mx-auto px-6 py-12">
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            <script>
-                const businesses = [
-                    {n: "सोशल मीडिया", i: "📱", d: "Recharge Model"},
-                    {n: "फ्रीलांसिंग", i: "💼", d: "Commission Model"},
-                    {n: "डेटिंग/चैट", i: "💖", d: "Coins Recharge"},
-                    {n: "डिज़ाइन स्टूडियो", i: "🎨", d: "Subscription"},
-                    {n: "सॉफ्टवेयर देव", i: "💻", d: "Project Model"},
-                    {n: "ऑफिस ERP/CRM", i: "📊", d: "SaaS Model"},
-                    {n: "बैंकिंग कोर", i: "🏦", d: "Safe Vault"},
-                    {n: "ई-कॉमर्स", i: "🛒", d: "Multi-Vendor"},
-                    {n: "शिक्षा (Edu)", i: "🎓", d: "Free & Premium"},
-                    {n: "पेमेंट गेटवे", i: "💳", d: "Global Access"},
-                    {n: "टिकट बुकिंग", i: "🎫", d: "Instant Booking"},
-                    {n: "B2B टेंडर्स", i: "🏛️", d: "Govt Contracts"}
-                ];
-                businesses.forEach(b => {
-                    document.write(`
-                        <div class="p-8 bg-white shadow-xl rounded-2xl green-border hover:shadow-2xl transition cursor-pointer text-center">
-                            <div class="icon-box mb-4">${b.i}</div>
-                            <h3 class="text-xl font-bold text-gray-800">${b.n}</h3>
-                            <p class="text-gray-500 text-sm mb-4">${b.d}</p>
-                            <button class="golden-btn w-full py-2">खोलें</button>
-                        </div>
-                    `);
-                });
-            </script>
-        </div>
-    </section>
-
-    <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-[100]">
-        <div class="bg-white p-10 rounded-3xl w-full max-w-md shadow-2xl relative">
-            <h2 id="modal-title" class="text-3xl font-bold text-green-600 mb-6">साइनअप</h2>
-            
-            <input type="text" placeholder="मोबाइल / ईमेल" class="w-full p-4 border rounded-xl mb-4 outline-green-500">
-            <button class="w-full bg-green-600 text-white py-4 rounded-xl font-bold mb-4">OTP प्राप्त करें</button>
-            
-            <div class="flex gap-2 mb-4">
-                <input type="text" maxlength="1" class="w-1/4 p-4 border text-center text-2xl font-bold rounded-xl outline-green-500">
-                <input type="text" maxlength="1" class="w-1/4 p-4 border text-center text-2xl font-bold rounded-xl outline-green-500">
-                <input type="text" maxlength="1" class="w-1/4 p-4 border text-center text-2xl font-bold rounded-xl outline-green-500">
-                <input type="text" maxlength="1" class="w-1/4 p-4 border text-center text-2xl font-bold rounded-xl outline-green-500">
+    <div id="home-view" class="container mx-auto px-4 py-6 pb-24">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div class="glass p-6 flex flex-col justify-center">
+                <p class="text-xs text-slate-400 font-bold uppercase">आपका वॉलेट</p>
+                <h2 class="text-4xl font-black text-green-500">$1,250,480.00</h2>
+                <div class="flex gap-2 mt-4">
+                    <button class="golden-btn flex-1 py-3 text-sm" onclick="openApp('Payment', '💳')">पैसे जमा करें</button>
+                    <button class="bg-white/10 flex-1 py-3 rounded-2xl text-sm" onclick="openApp('Banking', '🏦')">निकासी</button>
+                </div>
             </div>
-
-            <button onclick="window.location.href='#dashboard'" class="golden-btn w-full py-4 text-lg">वेरिफाई और लॉगिन</button>
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 text-2xl">×</button>
+            <div class="glass p-6">
+                <p class="text-xs text-slate-400 font-bold mb-4 uppercase">ग्लोबल नेटवर्क स्थिति</p>
+                <div class="flex justify-between items-center">
+                    <span>सक्रिय यूजर: <b class="text-green-500">1.8M</b></span>
+                    <span>नोड्स: <b class="text-yellow-500">10,000+</b></span>
+                </div>
+                <div class="w-full bg-white/5 h-2 rounded-full mt-4 overflow-hidden">
+                    <div class="bg-green-500 h-full w-[85%] animate-pulse"></div>
+                </div>
+            </div>
         </div>
+
+        <h3 class="text-lg font-bold mb-4 px-2">सभी सक्रिय सेवाएं</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="service-grid"></div>
+    </div>
+
+    <div id="app-view" class="app-window">
+        <div class="sticky top-0 bg-white shadow-sm p-4 flex justify-between items-center z-[1100]">
+            <div class="flex items-center gap-4">
+                <span id="app-icon" class="text-3xl"></span>
+                <h2 id="app-name" class="text-xl font-bold">Service</h2>
+            </div>
+            <button onclick="closeApp()" class="bg-slate-100 p-2 rounded-full px-4 font-bold text-red-500">बंद करें</button>
+        </div>
+        <div id="app-content" class="p-4 container mx-auto pb-20"></div>
     </div>
 
     <script>
-        function showModal(type) {
-            document.getElementById('modal-overlay').classList.remove('hidden');
-            document.getElementById('modal-title').innerText = type === 'login' ? 'लॉगिन' : 'नया अकाउंट';
-        }
-        function closeModal() { document.getElementById('modal-overlay').classList.add('hidden'); }
-    </script>
+        const services = [
+            {n: "Social", i: "📱", f: "Chat & AI Feed"},
+            {n: "Freelance", i: "💼", f: "Tenders & Work"},
+            {n: "Dating", i: "💖", f: "Match & Coins"},
+            {n: "Design", i: "🎨", f: "Cloud Studio"},
+            {n: "Software", i: "💻", f: "Auto-Coding"},
+            {n: "ERP/CRM", i: "📊", f: "Business Intel"},
+            {n: "Banking", i: "🏦", f: "P2P Vault"},
+            {n: "Market", i: "🛒", f: "Global Multi-Vendor"},
+            {n: "Education", i: "🎓", f: "Neural Academy"},
+            {n: "Payment", i: "💳", f: "Crypto/UPI Hub"},
+            {n: "Travel", i: "🎫", f: "Jet Booking"},
+            {n: "Tenders", i: "🏛️", f: "B2B Master"}
+        ];
 
+        const grid = document.getElementById('service-grid');
+        services.forEach(s => {
+            grid.innerHTML += `
+                <div onclick="openApp('${s.n}', '${s.i}')" class="glass p-5 text-center active:scale-95 cursor-pointer border border-white/5 active-card">
+                    <div class="service-icon mb-3">${s.i}</div>
+                    <div class="text-xs font-black uppercase tracking-widest">${s.n}</div>
+                    <div class="text-[8px] text-green-500 font-bold mt-1 uppercase">${s.f}</div>
+                </div>
+            `;
+        });
+
+        function openApp(name, icon) {
+            document.body.style.overflow = 'hidden';
+            const app = document.getElementById('app-view');
+            app.classList.add('active');
+            document.getElementById('app-name').innerText = "HARI " + name.toUpperCase();
+            document.getElementById('app-icon').innerText = icon;
+            
+            let html = "";
+            switch(name) {
+                case 'Payment':
+                    html = `<div class="p-6 bg-slate-900 rounded-[30px] text-white text-center mb-6 shadow-xl">
+                        <h4 class="text-yellow-500 font-bold mb-4">Master UPI Gateway</h4>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=hari@upi&am=1000" class="mx-auto border-8 border-white rounded-2xl mb-4">
+                        <p class="text-xs opacity-60">स्कैन करके सीधे वॉलेट में पैसे जोड़ें</p>
+                    </div>`; break;
+                case 'Social':
+                    html = `<div class="space-y-4 mb-4" id="social-feed">
+                        <div class="p-4 bg-slate-100 rounded-3xl"><b>HAI Bot:</b> नमस्ते हरिगोविंद! ग्लोबल मेश अब 100% सिंक है।</div>
+                        <div class="p-4 bg-blue-50 rounded-3xl ml-6"><b>User_London:</b> Best platform ever!</div>
+                    </div>
+                    <div class="flex gap-2 sticky bottom-4"><input type="text" class="flex-1 p-4 bg-slate-200 rounded-full outline-none" placeholder="संदेश लिखें..."><button class="golden-btn px-6">भेजें</button></div>`; break;
+                case 'Market':
+                    html = `<div class="grid grid-cols-2 gap-4">
+                        <div class="border rounded-2xl overflow-hidden p-3"><p class="font-bold">iPhone 17 Pro</p><p class="text-green-600 font-bold">$999</p><button class="golden-btn w-full py-2 mt-2 text-xs">अभी खरीदें</button></div>
+                        <div class="border rounded-2xl overflow-hidden p-3"><p class="font-bold">HARI Watch</p><p class="text-green-600 font-bold">$199</p><button class="golden-btn w-full py-2 mt-2 text-xs">अभी खरीदें</button></div>
+                    </div>`; break;
+                default:
+                    html = `<div class="text-center py-20">
+                        <div class="text-7xl mb-6 animate-pulse">${icon}</div>
+                        <h3 class="text-2xl font-black mb-2">${name} सिस्टम</h3>
+                        <p class="text-slate-500 max-w-xs mx-auto mb-8">HAI AI द्वारा संचालित सुरक्षित सेवा।</p>
+                        <button class="golden-btn px-12 py-4">प्रवेश करें</button>
+                    </div>`;
+            }
+            document.getElementById('app-content').innerHTML = html;
+            speakAI(`${name} सक्रिय किया गया।`);
+        }
+
+        function closeApp() { 
+            document.body.style.overflow = 'auto';
+            document.getElementById('app-view').classList.remove('active'); 
+        }
+
+        function speakAI(text) {
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.rate = 1.2;
+            window.speechSynthesis.speak(msg);
+        }
+
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'hi', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+        }
+    </script>
 </body>
-                    </html>
+    </html>
     
