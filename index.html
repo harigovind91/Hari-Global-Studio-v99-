@@ -3,62 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hari Supreme - White Gold Edition</title>
+    <title>HARI Supreme - Public Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --supreme-green: #27ae60; --supreme-gold: #f1c40f; --supreme-bg: #ffffff; }
-        body { background-color: var(--supreme-bg); font-family: 'Inter', sans-serif; color: #1e293b; margin: 0; overflow-x: hidden; }
+        :root { --s-green: #27ae60; --s-gold: #f1c40f; --s-bg: #ffffff; }
+        body { background-color: var(--s-bg); font-family: 'Inter', sans-serif; color: #1e293b; margin: 0; overflow-x: hidden; }
         
-        /* White Glass Cards */
+        /* Premium White Cards */
         .card-white { background: #ffffff; border: 1.5px solid #f1f5f9; border-radius: 30px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); transition: 0.3s; }
-        .card-white:hover { border-color: var(--supreme-gold); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(241, 196, 15, 0.1); }
+        .card-white:hover { border-color: var(--s-gold); transform: translateY(-3px); }
         
-        /* Golden Button */
-        .btn-gold { background: linear-gradient(135deg, #f1c40f, #f39c12); color: white; font-weight: 900; border-radius: 20px; padding: 16px; text-align: center; cursor: pointer; border: none; box-shadow: 0 8px 20px rgba(241, 196, 15, 0.3); }
+        /* Golden Primary Button */
+        .btn-gold { background: linear-gradient(135deg, #f1c40f, #f39c12); color: white; font-weight: 900; border-radius: 20px; padding: 16px; text-align: center; cursor: pointer; border: none; box-shadow: 0 8px 20px rgba(241, 196, 15, 0.3); width: 100%; }
         
-        /* Green Outline Button */
-        .btn-green-outline { background: transparent; border: 2px solid var(--supreme-green); color: var(--supreme-green); font-weight: 800; border-radius: 20px; padding: 16px; text-align: center; }
+        /* Green Secondary Button */
+        .btn-green { background: transparent; border: 2px solid var(--s-green); color: var(--s-green); font-weight: 800; border-radius: 20px; padding: 16px; text-align: center; width: 100%; }
 
-        /* Golden Icon Glow */
-        .icon-gold { font-size: 45px; margin-bottom: 12px; filter: drop-shadow(0 4px 8px rgba(241, 196, 15, 0.4)); color: var(--supreme-gold); }
+        /* Icon Styling */
+        .icon-box { font-size: 40px; margin-bottom: 12px; filter: drop-shadow(0 4px 6px rgba(241, 196, 15, 0.3)); color: var(--s-gold); }
 
-        /* App Windows */
-        .app-window { background: #ffffff; color: #1e293b; min-height: 100vh; width: 100%; position: fixed; top: 0; left: 0; z-index: 2000; display: none; overflow-y: auto; }
-        .app-window.active { display: block; animation: slideUp 0.4s cubic-bezier(0, 0, 0.2, 1); }
+        /* App Window */
+        .app-window { background: #ffffff; min-height: 100vh; width: 100%; position: fixed; top: 0; left: 0; z-index: 2000; display: none; overflow-y: auto; }
+        .app-window.active { display: block; animation: slideUp 0.4s ease-out; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-        /* Marquee Custom */
-        .status-bar { background: #f0fff4; color: var(--supreme-green); font-size: 11px; font-weight: 900; border-bottom: 1px solid #dcfce7; }
+        .status-line { background: #f0fff4; color: var(--s-green); font-size: 11px; font-weight: 900; border-bottom: 1px solid #dcfce7; }
     </style>
 </head>
 <body>
 
-    <nav class="p-6 flex justify-between items-center sticky top-0 bg-white/80 backdrop-blur-md z-[100] border-b border-slate-100">
+    <nav class="p-6 flex justify-between items-center sticky top-0 bg-white/90 backdrop-blur-md z-[100] border-b border-slate-50">
         <h1 class="text-2xl font-black tracking-tight"><span class="text-green-600">HARI</span> <span class="text-yellow-500 uppercase">Supreme</span></h1>
-        <div class="flex gap-3">
-            <button onclick="openApp('Admin', '🔐')" class="bg-red-50 text-red-600 px-4 py-2 rounded-full text-[10px] font-black border border-red-100">ADMIN</button>
-            <div class="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center font-black text-yellow-500 border border-slate-200 shadow-inner">H</div>
-        </div>
+        <div class="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center font-black text-yellow-500 border border-slate-200">H</div>
     </nav>
 
-    <marquee class="status-bar py-3 uppercase tracking-[2px]">
-        ● HAI AI: ग्लोबल मेश नोड्स सक्रिय ● सुरक्षित भुगतान इंजन चालू है ● $1.2M वॉलेट सुरक्षित ● 24/7 कस्टमर सपोर्ट ●
+    <marquee class="status-line py-3 uppercase tracking-widest">
+        ● HAI AI: ग्लोबल मार्केट लाइव ● $1.2M रिवॉर्ड पूल सुरक्षित ● 12 मुख्य सेवाएं सक्रिय ● सुरक्षित पीयर-टू-पीयर पेमेंट चालू है ●
     </marquee>
 
     <div class="container mx-auto px-5 py-8 pb-32">
         
         <div class="card-white mb-10 border-l-8 border-l-yellow-500">
-            <p class="text-[10px] text-slate-400 font-black uppercase tracking-[4px] mb-2">Available Balance</p>
+            <p class="text-[10px] text-slate-400 font-black uppercase tracking-[4px] mb-2">My Wallet</p>
             <h2 class="text-5xl font-black text-slate-900 mb-8">$1,250,480.00</h2>
-            <div class="grid grid-cols-2 gap-4">
-                <button class="btn-gold" onclick="openApp('Deposit', '💳')">ADD FUNDS</button>
-                <button class="btn-green-outline" onclick="openApp('Withdraw', '🏦')">WITHDRAW</button>
+            <div class="flex gap-4">
+                <button class="btn-gold" onclick="openApp('Deposit', '💳')">DEPOSIT</button>
+                <button class="btn-green" onclick="openApp('Withdraw', '🏦')">WITHDRAW</button>
             </div>
         </div>
 
         <h3 class="text-xs font-black mb-8 text-slate-400 uppercase tracking-[4px] flex items-center gap-3">
-            <span class="w-10 h-[2px] bg-green-500"></span> 12 मास्टर सर्विसेज
+            <span class="w-10 h-[2px] bg-green-500"></span> Public Ecosystem
         </h3>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="service-grid">
@@ -66,18 +62,19 @@
     </div>
 
     <div id="app-view" class="app-window">
-        <div class="sticky top-0 bg-white border-b p-6 flex justify-between items-center shadow-sm">
+        <div class="sticky top-0 bg-white border-b p-6 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <span id="app-icon" class="text-4xl"></span>
-                <h2 id="app-name" class="font-black text-2xl text-slate-900 tracking-tighter uppercase">Service</h2>
+                <h2 id="app-name" class="font-black text-2xl text-slate-900 uppercase">Service</h2>
             </div>
-            <button onclick="closeApp()" class="bg-slate-900 text-white px-8 py-3 rounded-2xl font-black text-xs uppercase tracking-widest">Close</button>
+            <button onclick="closeApp()" class="bg-slate-900 text-white px-8 py-3 rounded-2xl font-black text-xs uppercase">Back</button>
         </div>
         <div id="app-content" class="p-8 container mx-auto"></div>
     </div>
 
     <script>
-        const allServices = [
+        // 12 Services list
+        const publicServices = [
             {n: "Market", i: "🛒"}, {n: "Social", i: "📱"}, 
             {n: "Freelance", i: "💼"}, {n: "Banking", i: "🏦"}, 
             {n: "Tenders", i: "🏛️"}, {n: "Software", i: "💻"}, 
@@ -86,13 +83,13 @@
             {n: "Analytics", i: "📊"}, {n: "Settings", i: "⚙️"}
         ];
 
-        function renderServices() {
+        function render() {
             const grid = document.getElementById('service-grid');
-            grid.innerHTML = allServices.map(s => `
+            grid.innerHTML = publicServices.map(s => `
                 <div onclick="openApp('${s.n}', '${s.i}')" class="card-white text-center cursor-pointer active:scale-95">
-                    <div class="icon-gold">${s.i}</div>
+                    <div class="icon-box">${s.i}</div>
                     <div class="text-xs font-black uppercase tracking-widest text-slate-800">${s.n}</div>
-                    <div class="text-[9px] text-green-600 font-bold mt-3 bg-green-50 py-1 rounded-full uppercase">Online</div>
+                    <div class="text-[9px] text-green-600 font-bold mt-3 uppercase">Available</div>
                 </div>
             `).join('');
         }
@@ -100,46 +97,26 @@
         function openApp(name, icon) {
             document.body.style.overflow = 'hidden';
             document.getElementById('app-view').classList.add('active');
-            document.getElementById('app-name').innerText = "HARI " + name;
+            document.getElementById('app-name').innerText = name;
             document.getElementById('app-icon').innerText = icon;
             
             let html = "";
-            if(name === 'Admin') {
-                html = `
-                <div class="max-w-md mx-auto text-center py-10">
-                    <div class="text-7xl mb-6">🔐</div>
-                    <h3 class="text-3xl font-black mb-4">Master Admin Access</h3>
-                    <p class="text-slate-500 mb-8 font-medium">Enter the secure HAI-2026-SUPREME key to proceed.</p>
-                    <input type="password" id="admin-key" placeholder="••••••••" class="w-full p-6 bg-slate-50 rounded-[25px] border-2 border-slate-100 mb-6 text-center text-2xl outline-none focus:border-yellow-500 transition-all">
-                    <button onclick="verifyAdmin()" class="btn-gold w-full py-6 text-lg uppercase tracking-widest">Verify Identity</button>
-                </div>`;
-            } else if(name === 'Security') {
-                html = `<div class="bg-slate-50 p-8 rounded-[40px] border border-slate-100">
-                    <h3 class="font-black text-2xl mb-6 text-green-600 italic underline"># SECURITY.md POLICY</h3>
-                    <p class="font-bold text-slate-700">Supported Versions:</p>
-                    <ul class="mt-4 space-y-2 font-medium">
-                        <li class="p-4 bg-white rounded-2xl flex justify-between"><span>Ver 5.1.x</span> <span class="text-green-600 font-black">✅ Supported</span></li>
-                        <li class="p-4 bg-white rounded-2xl flex justify-between"><span>Ver 4.0.x</span> <span class="text-green-600 font-black">✅ Supported</span></li>
-                        <li class="p-4 bg-white rounded-2xl flex justify-between opacity-50"><span>Ver 3.0.x</span> <span class="text-red-600 font-black">❌ Legacy</span></li>
-                    </ul>
+            if(name === 'Security') {
+                html = `<div class="bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                    <h3 class="font-black text-xl mb-4 text-green-600">User Security Policy</h3>
+                    <p class="text-sm text-slate-600 font-medium">आपका डेटा एंड-टू-एंड एन्क्रिप्टेड है। वर्ज़न 5.1.x पर सभी सुरक्षा मानक लागू हैं।</p>
+                    <div class="mt-6 p-4 bg-white rounded-2xl border border-slate-100 text-xs font-bold uppercase">
+                        System Status: ✅ Secured by HAI AI
+                    </div>
                 </div>`;
             } else {
                 html = `<div class="text-center py-20">
-                    <div class="text-9xl mb-8 opacity-20">${icon}</div>
-                    <h3 class="text-3xl font-black text-slate-800">${name} Portal</h3>
-                    <p class="text-slate-400 font-bold uppercase tracking-[5px] mt-4">Module Initializing...</p>
+                    <div class="text-9xl mb-8 opacity-10">${icon}</div>
+                    <h3 class="text-2xl font-black text-slate-900">${name} Portal</h3>
+                    <p class="text-slate-400 font-bold uppercase tracking-[4px] mt-4">Connecting to Global Node...</p>
                 </div>`;
             }
             document.getElementById('app-content').innerHTML = html;
-        }
-
-        function verifyAdmin() {
-            if(document.getElementById('admin-key').value === 'HAI-2026-SUPREME') {
-                alert('ACCESS GRANTED. Welcome Hari.');
-                document.getElementById('app-content').innerHTML = `<div class="p-10 bg-green-50 border-2 border-green-200 rounded-[40px] text-center text-green-700 font-black text-2xl shadow-xl">🛡️ MASTER CONTROL PANEL ACTIVE 🛡️</div>`;
-            } else {
-                alert('SECURITY ALERT: UNAUTHORIZED ACCESS ATTEMPT.');
-            }
         }
 
         function closeApp() { 
@@ -147,7 +124,7 @@
             document.body.style.overflow = 'auto';
         }
 
-        renderServices();
+        render();
     </script>
 </body>
 </html>
