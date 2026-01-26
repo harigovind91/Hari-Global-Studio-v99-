@@ -1,0 +1,8 @@
+// Coin System for Recharge
+const UserWallet = {
+    coins: 0,
+    recharge: function(pack) {
+        if(pack == 'GOLD') this.coins += 1000;
+        // ये कोइंस चैटिंग और गेमिंग अनलॉक करेंगे
+    }
+};
