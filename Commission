@@ -1,0 +1,7 @@
+// Heaven Tax: 5% for System Maintenance
+const CommissionLogic = (total) => {
+    let systemCut = total * 0.05; 
+    let workerPay = total - systemCut;
+    return { toSystem: systemCut, toUser: workerPay };
+};
+
