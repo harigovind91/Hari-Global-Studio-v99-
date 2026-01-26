@@ -1,0 +1,14 @@
+# Dependabot version updates को सक्रिय करने के लिए यह फाइल जरूरी है।
+# यह आपके 'Hari Supreme' इकोसिस्टम की सुरक्षा बढ़ाता है।
+
+version: 2
+updates:
+  - package-ecosystem: "npm" # आपके HTML/Tailwind प्रोजेक्ट के लिए
+    directory: "/" 
+    schedule:
+      interval: "weekly" # हर हफ्ते सिक्योरिटी अपडेट्स चेक करेगा
+    open-pull-requests-limit: 10
+    labels:
+      - "security"
+      - "dependencies"
+      
