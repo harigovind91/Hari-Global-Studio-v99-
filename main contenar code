@@ -1,0 +1,13 @@
+// 1000 फाइलों को आपस में जोड़ने वाला कोड
+function startEngine() {
+    console.log("HAI: 1000 Modules Loading...");
+    
+    // बटन पर क्लिक करने पर क्या होगा
+    window.openService = function(type) {
+        if(type === 'Recharge') DatingSystem.recharge(50);
+        if(type === 'Payment') GlobalPayment.initiate('UPI', 100);
+        if(type === 'Commission') calculateCommission(1000);
+        alert("HAI: " + type + " सर्विस अब लाइव है!");
+    };
+}
+startEngine();
