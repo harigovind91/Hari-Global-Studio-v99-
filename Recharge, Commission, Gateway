@@ -1,0 +1,34 @@
+<script>
+    // HAI (Hari AI) - Function Activation Logic
+    document.querySelectorAll('.golden-btn').forEach((btn, index) => {
+        btn.addEventListener('click', function() {
+            const businessName = this.parentElement.querySelector('h3').innerText;
+            const model = this.parentElement.querySelector('p').innerText;
+            
+            console.log(`HAI: Opening ${businessName}...`);
+            
+            // 1. अगर रिचार्ज मॉडल है (Dating/Social)
+            if(model.includes("Recharge")) {
+                let amount = prompt(`${businessName} के लिए रिचार्ज राशि डालें (Min $10):`);
+                if(amount) alert(`HAI: Redirecting to Payment Gateway for $${amount}`);
+            } 
+            
+            // 2. अगर कमीशन मॉडल है (Freelancing/Market)
+            else if(model.includes("Commission")) {
+                alert(`${businessName}: डैशबोर्ड खुल रहा है... यहाँ आपका 5% कमीशन ट्रैक होगा।`);
+                window.location.href = '#dashboard'; // डैशबोर्ड पर भेजें
+            }
+            
+            // 3. अन्य सभी सेवाओं के लिए
+            else {
+                alert(`HAI: ${businessName} की 1000 फाइलें लोड हो रही हैं... कृपया प्रतीक्षा करें।`);
+            }
+        });
+    });
+
+    // लॉगिन और साइनअप बटन सक्रिय करना
+    document.querySelector('button[onclick*="login"]').onclick = function() {
+        alert("HAI: मोबाइल OTP सिस्टम सक्रिय हो रहा है...");
+        showModal('login');
+    };
+</script>
