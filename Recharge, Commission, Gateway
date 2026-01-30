@@ -1,11 +1,11 @@
 <script>
-    // HAI (Hari AI) - Function Activation Logic
+    // HAI GLOBAL HUB - Function Activation Logic
     document.querySelectorAll('.golden-btn').forEach((btn, index) => {
         btn.addEventListener('click', function() {
             const businessName = this.parentElement.querySelector('h3').innerText;
             const model = this.parentElement.querySelector('p').innerText;
             
-            console.log(`HAI: Opening ${businessName}...`);
+            console.log(`HAI GLOBAL HUB: Opening ${businessName}...`);
             
             // 1. अगर रिचार्ज मॉडल है (Dating/Social)
             if(model.includes("Recharge")) {
@@ -28,7 +28,7 @@
 
     // लॉगिन और साइनअप बटन सक्रिय करना
     document.querySelector('button[onclick*="login"]').onclick = function() {
-        alert("HAI: मोबाइल OTP सिस्टम सक्रिय हो रहा है...");
+        alert("HAI GLOBAL HUB: मोबाइल OTP सिस्टम सक्रिय हो रहा है...");
         showModal('login');
     };
 </script>
