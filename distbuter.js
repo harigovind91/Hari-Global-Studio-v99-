@@ -1,4 +1,4 @@
-// HARI GLOBAL STUDIO - Advanced Social Engine
+// HAI GLOBAL HUB - Advanced Social Engine
 const SocialUniverse = {
     platforms: ["YouTube", "Instagram", "Facebook", "TikTok", "LinkedIn", "Twitter"],
     
@@ -10,7 +10,7 @@ const SocialUniverse = {
     oneClickShare: function(videoData) {
         // एक साथ सभी 10+ प्लेटफार्मों पर पोस्ट करना
         this.platforms.forEach(platform => {
-            console.log(`Sharing to ${platform} via HARI GLOBAL STUDIO secure API...`);
+            console.log(`Sharing to ${platform} via HAI GLOBAL HUB secure API...`);
         });
         return "Post Successful Globally!";
     },
