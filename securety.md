@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hari Supreme - Global Portal</title>
+    <title>Hai Global Hub- Global Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root { --supreme-green: #2ecc71; --supreme-gold: #f1c40f; --supreme-dark: #050a18; }
@@ -88,7 +88,7 @@
     <script>
         function openApp(name) {
             document.getElementById('app-view').classList.add('active');
-            document.getElementById('app-name').innerText = "HARI " + name;
+            document.getElementById('app-name').innerText = "HAI " + name;
             let content = "";
 
             if(name === 'Security') {
