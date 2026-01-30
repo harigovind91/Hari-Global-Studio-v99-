@@ -1,9 +1,9 @@
 /* HAI GLOBAL HUB - THE HEAVEN ENGINE 
-   Author: Harigovind Singh Chauhan | AI: HAI (Hari AI)
+   Author: Harigovind Singh Chauhan | AI: HAI 
    Total Modules: 12 | Business Models: All Included
 */
 
-const HariGlobalStudio = {
+const HaiGlobalhub = {
     // 1. WORLDWIDE PAYMENT GATEWAY (UPI, PayPal, Cards, Google Pay)
     PaymentGateway: {
         methods: ["UPI", "PhonePe", "PayPal", "GooglePay", "Visa", "MasterCard", "NetBanking"],
