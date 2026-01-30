@@ -1,4 +1,4 @@
-// HAI (Hari AI) - Worldwide Payment Bridge
+// HAI - Worldwide Payment Bridge
 const HAI_Pay = {
     methods: ["UPI", "PhonePe", "GooglePay", "PayPal", "Visa/MasterCard", "NetBanking"],
     
@@ -10,8 +10,8 @@ const HAI_Pay = {
         if (this.secureHandshake()) {
             return {
                 status: "Success",
-                transactionToken: "HARI_" + Date.now(),
-                vault: "HARI_CENTRAL_BANK"
+                transactionToken: "HAI_" + Date.now(),
+                vault: "HAI_CENTRAL_BANK"
             };
         }
     },
