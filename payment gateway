@@ -1,8 +1,8 @@
-// HAI (Hari AI) Universal Gateway
+// HAI Universal Gateway
 const GlobalPay = {
     platforms: ["UPI", "PayPal", "Card", "NetBanking"],
     process: function(amount, type) {
-        // दुनिया के किसी भी कोने से पैसा आपके 'HARI VAULT' में आएगा
+        // दुनिया के किसी भी कोने से पैसा आपके 'HAI VAULT' में आएगा
         console.log(`Receiving ${amount} via ${type}... Secure by Master Key.`);
         return "SUCCESS_TOKEN_2026";
     }
