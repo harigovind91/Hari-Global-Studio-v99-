@@ -1,4 +1,4 @@
-// HAI (Hari AI) - Ghost Server Protocol v9.9
+// HAI GLOBAL HUB - Ghost Server Protocol v9.9
 const GhostShield = {
     encryptionLevel: "Military_Grade_AES_256",
     ipHiding: true,
@@ -11,7 +11,7 @@ const GhostShield = {
     
     // मास्टर सिक्योरिटी की के बिना एक्सेस ब्लॉक करना
     verifyAdmin: function(inputKey) {
-        const masterKey = "HARI_GLOBAL_3033"; // आपकी सुरक्षित चाबी
+        const masterKey = "HAI_GLOBAL_3033"; // आपकी सुरक्षित चाबी
         return inputKey === masterKey;
     }
 };
