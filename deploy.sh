@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "🚀 HARI GLOBAL STUDIO Deployment Starting..."
+echo "🚀 HAI GLOBAL HUB Deployment Starting..."
 
 # 1. Initialize Git (If not done)
 git init
@@ -18,5 +18,5 @@ git commit -m "🔥 FULL DEPLOY: 100+ Files, Advanced GPS Ghosting, 30+ Integrat
 git branch -M main
 git push -u origin main --force
 
-echo "✅ Deployment Complete! HARI GLOBAL STUDIO is now Live."
+echo "✅ Deployment Complete! HAI GLOBAL HUB is now Live."
 
