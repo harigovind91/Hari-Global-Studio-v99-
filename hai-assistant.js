@@ -1,6 +1,6 @@
-// HAI (Hari AI) - The Guardian of Heaven
+// HAI  - The Guardian of Heaven
 const HAI_Assistant = {
-    name: "HAI (Hari AI)",
+    name: "HAI ",
     creator: "Harigovind Singh Chauhan",
     themeColor: "#f1c40f",
 
