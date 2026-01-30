@@ -1,4 +1,4 @@
-// HARI GLOBAL STUDIO - Advanced Designing Tool
+// HAI GLOBAL HUB - Advanced Designing Tool
 const CAD_Pro = {
     tools: ["Architecture", "Mechanical", "Electrical", "Civil"],
     renderQuality: "4K_Ultra_HD",
@@ -16,6 +16,6 @@ const CAD_Pro = {
 
     exportDesign: function(format) {
         // डिजाइन को 3D प्रिंट या होलोग्राम के लिए एक्सपोर्ट करना
-        return `Exporting to ${format}... Ready for HARI GLOBAL STUDIO World.`;
+        return `Exporting to ${format}... Ready for HAI GLOBAL HUB.`;
     }
 };
