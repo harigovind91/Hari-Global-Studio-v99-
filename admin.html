@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MASTER CONTROL - HARI SUPREME BACKEND</title>
+    <title>MASTER CONTROL - HAI GLOBAL HUB BACKEND</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
     <style>
@@ -24,7 +24,7 @@
 
     <div id="auth-overlay">
         <div class="bg-[#161b22] p-10 rounded-2xl border border-[#30363d] text-center w-96">
-            <h2 class="text-2xl font-black text-yellow-500 mb-6 tracking-tighter">HARI BACKEND AUTH</h2>
+            <h2 class="text-2xl font-black text-yellow-500 mb-6 tracking-tighter">HAI BACKEND AUTH</h2>
             <input type="password" id="master-key" placeholder="Enter Security Key" class="w-full p-4 bg-[#0d1117] border border-[#30363d] rounded-xl mb-4 text-center outline-none focus:border-yellow-500">
             <button onclick="checkAuth()" class="w-full bg-yellow-500 text-black font-bold py-4 rounded-xl hover:bg-yellow-400 transition">ACCESS SYSTEM</button>
             <p id="err" class="text-red-500 mt-4 text-xs hidden">Unauthorized Access Attempt Logged!</p>
@@ -117,7 +117,7 @@
         // 1. AUTH LOGIC
         function checkAuth() {
             const key = document.getElementById('master-key').value;
-            if(key === "HARI-VAULT-2026") {
+            if(key === "HAI-VAULT-2026") {
                 document.getElementById('auth-overlay').style.display = 'none';
                 initBackend();
             } else {
