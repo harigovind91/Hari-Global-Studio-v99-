@@ -1,4 +1,4 @@
-// HARI GLOBAL STUDIO - High-End GPS Logic
+// HAI GLOBAL HUB - High-End GPS Logic
 const GPS_Engine = {
     mode: "GHOST_MODE_ON", // डेटा को अदृश्य रखने के लिए
     mapSource: "Satellite_3D_RealTime",
@@ -17,7 +17,7 @@ const GPS_Engine = {
 
     trackDevice: function(deviceId) {
         // वर्ल्ड मैप पर डिवाइस की लाइव स्थिति (Precision: 0.1m)
-        return `Device ${deviceId} is currently protected by HARI GLOBAL STUDIO.`;
+        return `Device ${deviceId} is currently protected by HARI GLOBAL HUB.`;
     }
 };
 
