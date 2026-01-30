@@ -1,4 +1,4 @@
-// HARI GLOBAL STUDIO - Advanced Logic
+// HAI GLOBAL HUB - Advanced Logic
 const GlobalSecurity = {
     masterKey: "ADMIN_HAI_2026",
     
