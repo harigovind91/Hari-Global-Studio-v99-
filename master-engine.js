@@ -1,4 +1,4 @@
-/* HARI GLOBAL STUDIO V99 - THE HEAVEN ENGINE 
+/* HAI GLOBAL HUB - THE HEAVEN ENGINE 
    Author: Harigovind Singh Chauhan | AI: HAI (Hari AI)
    Total Modules: 12 | Business Models: All Included
 */
@@ -9,7 +9,7 @@ const HariGlobalStudio = {
         methods: ["UPI", "PhonePe", "PayPal", "GooglePay", "Visa", "MasterCard", "NetBanking"],
         process: function(amount, method) {
             console.log("HAI: Redirecting to Secure Gateway for " + amount);
-            return { status: "SUCCESS", txnID: "HARI" + Date.now() };
+            return { status: "SUCCESS", txnID: "HAI" + Date.now() };
         }
     },
 
@@ -50,4 +50,4 @@ const HariGlobalStudio = {
 };
 
 // सिस्टम चालू करें
-HariGlobalStudio.initAllSectors();
+HaiGlobalHub.initAllSectors();
