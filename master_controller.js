@@ -1,4 +1,4 @@
-// HARI GLOBAL STUDIO - Professional Master Controller v99
+// HAI GLOBAL HUB - Professional Master Controller v99
 const HAI_Controller = {
     version: "9.9.0",
     totalModules: 1000,
