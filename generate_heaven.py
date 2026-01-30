@@ -9,10 +9,10 @@ sectors = [
 ]
 
 for s in sectors:
-    os.makedirs(f"HARI_STUDIO_V99/{s}", exist_ok=True)
+    os.makedirs(f"HAI_GLOBAL_HUB/{s}", exist_ok=True)
     for i in range(1, 85): # हर सेक्टर में लगभग 85 फाइलें
-        with open(f"HARI_STUDIO_V99/{s}/module_{i}.js", "w") as f:
-            f.write(f"// HAI (Hari AI) System - Sector: {s}\n")
+        with open(f"HAI_GLOBAL_HUB/{s}/module_{i}.js", "w") as f:
+            f.write(f"// HAI System - Sector: {s}\n")
             f.write("// Purpose: Make the World a Heaven\n")
             f.write("console.log('Active and Secure');")
 
