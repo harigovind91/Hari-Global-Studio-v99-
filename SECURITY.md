@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hari Supreme - Global Portal</title>
+    <title>HAI GLOBAL HUB- Global Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root { --supreme-green: #2ecc71; --supreme-gold: #f1c40f; --supreme-dark: #050a18; }
@@ -108,7 +108,7 @@
                         </tbody>
                     </table>
                     <h4 class="font-bold text-lg mt-8 mb-2">## Reporting a Vulnerability</h4>
-                    <p class="text-sm text-gray-600">Please report vulnerabilities directly through the admin panel or email security@hari-supreme.global. Expect an update within 24-48 hours.</p>
+                    <p class="text-sm text-gray-600">Please report vulnerabilities directly through the admin panel or email security@hai-global hub.global. Expect an update within 24-48 hours.</p>
                 </div>`;
             } else if(name === 'Admin') {
                 content = `
@@ -129,7 +129,7 @@
 
         function checkKey() {
             if(document.getElementById('m-key').value === 'HAI-2026-SUPREME') {
-                alert('ACCESS GRANTED. Welcome Hari.');
+                alert('ACCESS GRANTED. Welcome Hai Global Hub.');
             } else {
                 alert('ACCESS DENIED. Invalid Security Key.');
             }
