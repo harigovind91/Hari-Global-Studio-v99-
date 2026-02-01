@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HAI ULTIMATE MASTER STUDIO</title>
+    <title>HAI DESIGN STUDIO | Full Access</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -12,11 +12,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        body { background-color: #000; color: #fff; margin: 0; overflow: hidden; font-family: 'Inter', sans-serif; }
-        .glass { background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
-        .neon-border { border: 1px solid #00f3ff; box-shadow: 0 0 15px rgba(0, 243, 255, 0.2); }
-        .hide-scroll::-webkit-scrollbar { display: none; }
-        canvas { width: 100% !important; height: 100% !important; border-radius: 20px; }
+        body { background-color: #050505; color: #fff; margin: 0; overflow: hidden; font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(15, 15, 20, 0.9); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.05); }
+        .active-tool { background: #00f3ff; color: #000; box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        canvas { border-radius: 24px; cursor: crosshair; }
+        input[type="file"] { display: none; }
     </style>
 </head>
 <body>
@@ -25,136 +26,178 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        function HAIMasterStudio() {
-            const [activeTool, setActiveTool] = useState('CAD');
-            const [activeSector, setActiveSector] = useState("Automobile");
-            const [isProcessing, setIsProcessing] = useState(false);
-            const [selectedImage, setSelectedImage] = useState(null);
+        function HAIDesignStudio() {
+            const [sector, setSector] = useState("Infrastructure");
+            const [fileName, setFileName] = useState("HAI_PROJECT_ALPHA");
+            const [rotationSpeed, setRotationSpeed] = useState(0.005);
+            const [isAutoSaving, setIsAutoSaving] = useState(false);
             const mountRef = useRef(null);
+            const sceneRef = useRef(null);
 
-            const sectors = ["Automobile", "Infrastructure", "Agriculture", "Fashion", "Aerospace", "Medical Lab"];
-
-            // 1. 3D Engine Logic
+            // --- 1. Auto-Save Function ---
             useEffect(() => {
-                if (activeTool === 'CAD' && mountRef.current) {
+                const timer = setInterval(() => {
+                    setIsAutoSaving(true);
+                    localStorage.setItem('hai_last_sector', sector);
+                    localStorage.setItem('hai_project_name', fileName);
+                    setTimeout(() => setIsAutoSaving(false), 2000);
+                }, 10000); // Saves every 10 seconds
+                return () => clearInterval(timer);
+            }, [sector, fileName]);
+
+            // --- 2. 3D Engine Core Functions ---
+            useEffect(() => {
+                if (mountRef.current) {
+                    const width = mountRef.current.clientWidth;
+                    const height = mountRef.current.clientHeight;
+                    
                     const scene = new THREE.Scene();
-                    const camera = new THREE.PerspectiveCamera(75, mountRef.current.clientWidth / mountRef.current.clientHeight, 0.1, 1000);
+                    sceneRef.current = scene;
+                    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
                     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-                    renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
-                    mountRef.current.innerHTML = ''; 
+                    
+                    renderer.setSize(width, height);
+                    mountRef.current.innerHTML = '';
                     mountRef.current.appendChild(renderer.domElement);
 
-                    const grid = new THREE.GridHelper(50, 50, 0x00f3ff, 0x111111);
+                    // Grid Function
+                    const grid = new THREE.GridHelper(100, 50, 0x00f3ff, 0x111111);
+                    grid.material.opacity = 0.15;
+                    grid.material.transparent = true;
                     scene.add(grid);
-                    
-                    const geometry = new THREE.IcosahedronGeometry(2, 2);
-                    const material = new THREE.MeshStandardMaterial({ color: 0x00f3ff, wireframe: true });
-                    const object = new THREE.Mesh(geometry, material);
-                    scene.add(object);
 
-                    const light = new THREE.PointLight(0xffffff, 1, 100);
-                    light.position.set(10, 10, 10);
-                    scene.add(light);
-                    scene.add(new THREE.AmbientLight(0x404040));
+                    // Geometry Logic based on Sector
+                    let geometry;
+                    switch(sector) {
+                        case "Automobile": geometry = new THREE.TorusKnotGeometry(2.5, 0.6, 100, 16); break;
+                        case "Aerospace": geometry = new THREE.ConeGeometry(3, 7, 32); break;
+                        case "Electronics": geometry = new THREE.SphereGeometry(3, 32, 32); break;
+                        case "Glamour Pro": geometry = new THREE.OctahedronGeometry(4, 0); break;
+                        default: geometry = new THREE.BoxGeometry(4, 8, 4);
+                    }
 
-                    camera.position.z = 8;
+                    const edges = new THREE.EdgesGeometry(geometry);
+                    const mesh = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x00f3ff }));
+                    scene.add(mesh);
+
+                    camera.position.set(12, 12, 12);
+                    camera.lookAt(0,0,0);
 
                     const animate = () => {
                         requestAnimationFrame(animate);
-                        object.rotation.y += 0.005;
+                        mesh.rotation.y += rotationSpeed;
                         renderer.render(scene, camera);
                     };
                     animate();
-                }
-            }, [activeTool]);
 
-            // 2. Converters Logic
-            const handleAction = (msg) => {
-                alert(`HAI AI: ${msg}`);
+                    // Cleanup on unmount
+                    return () => {
+                        renderer.dispose();
+                        geometry.dispose();
+                    };
+                }
+            }, [sector, rotationSpeed]);
+
+            // --- 3. Export Function ---
+            const handleExport = () => {
+                const data = { project: fileName, sector: sector, timestamp: new Date().toISOString() };
+                const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${fileName}.hai`;
+                link.click();
             };
 
             return (
-                <div className="h-screen flex flex-col overflow-hidden">
-                    {/* --- HEADER --- */}
-                    <div className="h-20 glass flex items-center justify-between px-8 border-b border-zinc-800">
-                        <div>
-                            <h1 className="text-2xl font-black text-cyan-400 tracking-tighter uppercase">HAI UNIVERSAL ENGINE</h1>
-                            <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Global Industrial & Glamour Suite</p>
+                <div className="flex h-screen w-screen overflow-hidden">
+                    
+                    {/* SIDEBAR TOOLS */}
+                    <aside className="w-20 glass flex flex-col items-center py-8 gap-8 border-r border-white/5 z-50">
+                        <div className="w-12 h-12 bg-cyan-500 rounded-2xl flex items-center justify-center text-black font-black text-xl shadow-lg">H</div>
+                        
+                        <div className="flex flex-col gap-4">
+                            <button title="Rotate Fast" onClick={() => setRotationSpeed(0.05)} className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-cyan-500 hover:text-black transition"><i className="fas fa-sync-alt"></i></button>
+                            <button title="Stop Rotation" onClick={() => setRotationSpeed(0)} className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-red-500 transition"><i className="fas fa-pause"></i></button>
+                            <button title="Zoom In" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-zinc-800 transition"><i className="fas fa-search-plus"></i></button>
+                            <button title="3D Mesh" className="w-12 h-12 rounded-full active-tool flex items-center justify-center transition"><i className="fas fa-cube"></i></button>
                         </div>
 
-                        <div className="flex gap-4">
-                            <button onClick={()=>setActiveTool('CAD')} className={`px-4 py-2 rounded-xl text-xs font-bold transition ${activeTool === 'CAD' ? 'bg-cyan-500 text-black' : 'bg-zinc-800'}`}>🏗️ CAD ENGINE</button>
-                            <button onClick={()=>setActiveTool('GLAMOUR')} className={`px-4 py-2 rounded-xl text-xs font-bold transition ${activeTool === 'GLAMOUR' ? 'bg-pink-600 text-white' : 'bg-zinc-800'}`}>👗 GLAMOUR PRO</button>
+                        <div className="mt-auto flex flex-col gap-4">
+                            {isAutoSaving && <span className="text-[8px] text-cyan-500 animate-pulse font-bold">SAVING...</span>}
+                            <button className="text-zinc-600 hover:text-white transition"><i className="fas fa-cog text-xl"></i></button>
                         </div>
-                    </div>
+                    </aside>
 
-                    <div className="flex flex-1 overflow-hidden">
-                        {/* --- LEFT PANEL: CONTROLS & AI --- */}
-                        <div className="w-[350px] border-r border-zinc-800 bg-[#080808] p-6 flex flex-col gap-6 overflow-y-auto">
+                    {/* MAIN ENGINE */}
+                    <main className="flex-1 flex flex-col relative bg-[#020202]">
+                        
+                        <header className="h-16 glass flex items-center justify-between px-8 border-b border-white/5 z-10">
+                            <div className="flex items-center gap-4">
+                                <span className="text-[10px] font-black tracking-widest text-cyan-500">HAI ENGINE V3</span>
+                                <div className="h-4 w-px bg-white/10"></div>
+                                <input 
+                                    className="bg-transparent border-none outline-none text-[10px] text-zinc-500 font-mono w-40" 
+                                    value={fileName} 
+                                    onChange={(e) => setFileName(e.target.value.toUpperCase())}
+                                />
+                            </div>
                             
-                            {/* Sector Selector */}
-                            <div>
-                                <label className="text-[10px] text-zinc-500 font-bold uppercase mb-2 block">Active Sector</label>
-                                <div className="grid grid-cols-2 gap-2">
-                                    {sectors.map(s => (
-                                        <button key={s} onClick={()=>setActiveSector(s)} className={`text-[10px] p-2 rounded-lg border border-zinc-800 ${activeSector === s ? 'border-cyan-500 text-cyan-500' : 'text-zinc-500'}`}>{s}</button>
-                                    ))}
+                            <div className="flex gap-3">
+                                <label className="bg-zinc-900 px-5 py-2 rounded-xl text-[10px] font-bold cursor-pointer border border-white/10 hover:border-cyan-500 transition-all flex items-center gap-2">
+                                    <i className="fas fa-cloud-upload-alt text-blue-400"></i> IMPORT
+                                    <input type="file" onChange={(e) => setFileName(e.target.files[0].name.split('.')[0].toUpperCase())} />
+                                </label>
+                                <button onClick={handleExport} className="bg-cyan-600 text-black px-5 py-2 rounded-xl text-[10px] font-black uppercase shadow-lg">
+                                    DOWNLOAD PROJECT
+                                </button>
+                            </div>
+                        </header>
+
+                        <div className="flex-1 p-6 flex flex-col gap-6">
+                            {/* 3D CANVAS */}
+                            <div ref={mountRef} className="flex-1 bg-black/40 rounded-[3rem] border border-white/5 overflow-hidden shadow-inner relative">
+                                <div className="absolute top-6 left-6 flex gap-2">
+                                    <span className="bg-black/60 backdrop-blur px-3 py-1 rounded-full text-[9px] font-mono text-cyan-400 border border-cyan-500/20 tracking-tighter">RENDER: STABLE</span>
+                                    <span className="bg-black/60 backdrop-blur px-3 py-1 rounded-full text-[9px] font-mono text-cyan-400 border border-cyan-500/20 tracking-tighter">FPS: 60</span>
                                 </div>
                             </div>
 
-                            <hr className="border-zinc-800" />
-
-                            {/* Global Tools */}
-                            <div className="space-y-4">
-                                <label className="text-[10px] text-zinc-500 font-bold uppercase block">Universal Converters</label>
-                                <div className="flex flex-wrap gap-2">
-                                    <button onClick={()=>handleAction("Converting to PDF...")} className="p-2 bg-zinc-900 rounded-lg text-xs hover:bg-zinc-700">📄 PDF</button>
-                                    <button onClick={()=>handleAction("Exporting Excel...")} className="p-2 bg-zinc-900 rounded-lg text-xs hover:bg-zinc-700">📊 EXCEL</button>
-                                    <button onClick={()=>handleAction("Converting Image...")} className="p-2 bg-zinc-900 rounded-lg text-xs hover:bg-zinc-700">🖼️ JPG/PNG</button>
-                                    <button onClick={()=>handleAction("Resizing File...")} className="p-2 bg-zinc-900 rounded-lg text-xs hover:bg-zinc-700">✂️ RESIZE</button>
-                                </div>
-                            </div>
-
-                            {/* File Upload Area */}
-                            <div className="mt-auto border-2 border-dashed border-zinc-800 rounded-3xl p-6 text-center hover:border-cyan-500 transition cursor-pointer">
-                                <i className="fas fa-cloud-upload-alt text-2xl text-zinc-600 mb-2"></i>
-                                <p className="text-[10px] font-bold text-zinc-400">UPLOAD BLUEPRINT / PHOTO</p>
-                                <p className="text-[8px] text-zinc-600 uppercase mt-1">AI Will Analyze Automatically</p>
+                            {/* SECTOR SWITCHER */}
+                            <div className="h-16 flex gap-3 overflow-x-auto no-scrollbar pb-2">
+                                {["Infrastructure", "Automobile", "Aerospace", "Electronics", "Glamour Pro"].map(s => (
+                                    <button 
+                                        key={s} 
+                                        onClick={() => setSector(s)}
+                                        className={`px-8 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${sector === s ? 'bg-white text-black' : 'bg-zinc-900 text-zinc-500 border border-white/5 hover:border-white/20'}`}
+                                    >
+                                        {s}
+                                    </button>
+                                ))}
                             </div>
                         </div>
 
-                        {/* --- RIGHT PANEL: THE PREVIEW --- */}
-                        <div className="flex-1 bg-[#030303] relative p-8">
-                            <div className="absolute top-8 left-8 z-10">
-                                <span className="text-xs font-black text-cyan-500 uppercase tracking-widest bg-black/50 px-3 py-1 rounded-full border border-cyan-500/30">System: {activeTool} // {activeSector}</span>
-                            </div>
-
-                            {activeTool === 'CAD' ? (
-                                <div ref={mountRef} className="w-full h-full rounded-[40px] overflow-hidden neon-border"></div>
-                            ) : (
-                                <div className="w-full h-full flex flex-col items-center justify-center border border-pink-500/20 rounded-[40px] bg-gradient-to-b from-zinc-900/20 to-black">
-                                    <div className="text-center">
-                                        <i className="fas fa-user-astronaut text-6xl text-pink-500 mb-4 opacity-20"></i>
-                                        <p className="text-zinc-500 text-sm font-light tracking-[0.5em]">WAITING FOR GLAMOUR INPUT</p>
-                                        <button className="mt-6 bg-pink-600 px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:shadow-[0_0_20px_rgba(219,39,119,0.5)]">Activate Virtual Model</button>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Bottom Master Bar */}
-                            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-4 bg-black/80 p-3 rounded-3xl border border-zinc-800 backdrop-blur-xl">
-                                <button onClick={()=>handleAction("Printing...")} className="p-4 bg-zinc-900 rounded-2xl hover:text-cyan-400 transition"><i className="fas fa-print"></i></button>
-                                <button onClick={()=>handleAction("Starting Video Render...")} className="p-4 bg-zinc-900 rounded-2xl hover:text-pink-400 transition"><i className="fas fa-video"></i></button>
-                                <button onClick={()=>handleAction("Downloading Bundle...")} className="p-4 bg-cyan-600 text-black rounded-2xl font-black px-8">EXECUTE DOWNLOAD</button>
-                            </div>
+                        {/* AI ASSISTANT INPUT */}
+                        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-xl px-6">
+                            <form onSubmit={(e) => { e.preventDefault(); alert('HAI AI Processing your design command...'); }} className="glass rounded-full p-1.5 flex items-center gap-2 border border-white/10 shadow-2xl">
+                                <input 
+                                    type="text" 
+                                    placeholder="डिज़ाइन को मॉडिफाई करने के लिए यहाँ लिखें..." 
+                                    className="bg-transparent flex-1 outline-none px-5 text-xs text-white"
+                                />
+                                <button type="submit" className="w-10 h-10 rounded-full bg-cyan-500 text-black flex items-center justify-center hover:scale-105 transition">
+                                    <i className="fas fa-paper-plane text-xs"></i>
+                                </button>
+                            </form>
                         </div>
-                    </div>
+                    </main>
                 </div>
             );
         }
 
         const root = ReactDOM.createRoot(document.getElementById('hai-root'));
-        root.render(<HAIMasterStudio />);
+        root.render(<HAIDesignStudio />);
     </script>
 </body>
-</html>
+    </html>
+    
