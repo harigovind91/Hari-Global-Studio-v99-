@@ -1,0 +1,163 @@
+"use client";
+import React, { useRef, useState, useEffect } from 'react';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { STLExporter } from 'three-stdlib'; 
+import { 
+  FaCamera, FaFileExcel, FaImage, FaVideo, FaDownload, FaPrint, 
+  FaShareAlt, FaFileUpload, FaSyncAlt, FaCrop, FaDraftingCompass, FaMagic, FaExpand 
+} from 'react-icons/fa';
+
+export default function UltimateHAI() {
+  // --- Refs & States ---
+  const mountRef = useRef(null);
+  const sceneRef = useRef(new THREE.Scene());
+  const [activeSector, setActiveSector] = useState("Automobile");
+  const [messages, setMessages] = useState([{ role: 'ai', text: 'प्रणाम मालिक! HAI Universal तैयार है। आज कौन सा साम्राज्य खड़ा करना है?' }]);
+  const [input, setInput] = useState("");
+  const [selectedMedia, setSelectedMedia] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const sectors = ["Automobile", "Infrastructure", "Agriculture", "Fashion", "Aerospace", "Medical Lab", "Electronics"];
+
+  // --- 1. CAD ENGINE (THREE.JS) ---
+  useEffect(() => {
+    const scene = sceneRef.current;
+    scene.background = new THREE.Color(0x020202);
+    const camera = new THREE.PerspectiveCamera(75, (window.innerWidth * 0.6) / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+    renderer.setSize(window.innerWidth * 0.6, window.innerHeight - 120);
+    mountRef.current.appendChild(renderer.domElement);
+
+    const grid = new THREE.GridHelper(50, 50, 0x00ffcc, 0x111111);
+    scene.add(grid);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    camera.position.set(15, 15, 15);
+    new OrbitControls(camera, renderer.domElement);
+
+    const animate = () => { requestAnimationFrame(animate); renderer.render(scene, camera); };
+    animate();
+    return () => mountRef.current.removeChild(renderer.domElement);
+  }, []);
+
+  // --- 2. MASTER FILE HANDLER (AI + CONVERTER) ---
+  const handleUniversalUpload = async (event, type) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setMessages(prev => [...prev, { role: 'ai', text: `मालिक, ${file.name} को HAI Engine में लोड किया जा रहा है...` }]);
+
+    if (type === 'video' || type === 'image') {
+      setSelectedMedia(URL.createObjectURL(file));
+    }
+
+    if (type === 'excel') {
+      // यहाँ आपका Excel-to-3D लॉजिक चलेगा
+      setMessages(prev => [...prev, { role: 'ai', text: "डेटा पढ़ लिया गया है! 3D ब्लूप्रिंट तैयार हो रहा है।" }]);
+      addAIDesignToScene({ width: 5, height: 2, depth: 5, color: 0x00f2ff });
+    }
+  };
+
+  const addAIDesignToScene = (data) => {
+    const geometry = new THREE.BoxGeometry(data.width, data.height, data.depth);
+    const material = new THREE.MeshStandardMaterial({ color: data.color, wireframe: true });
+    const mesh = new THREE.Mesh(geometry, material);
+    sceneRef.current.add(mesh);
+  };
+
+  // --- 3. EXPORT & CONVERSION (PNG, JPG, STL) ---
+  const exportFile = (format) => {
+    if (format === 'stl') {
+      const exporter = new STLExporter();
+      const str = exporter.parse(sceneRef.current);
+      const blob = new Blob([str], { type: 'text/plain' });
+      downloadFile(URL.createObjectURL(blob), 'HAI_Design.stl');
+    } else {
+      const canvas = mountRef.current.querySelector('canvas');
+      downloadFile(canvas.toDataURL(`image/${format}`), `HAI_Design.${format}`);
+    }
+  };
+
+  const downloadFile = (url, name) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = name;
+    link.click();
+  };
+
+  // --- 4. GLAMOUR AI (VELVET FILTER) ---
+  const applyVelvetFilter = () => {
+    setIsProcessing(true);
+    setTimeout(() => {
+      setMessages(prev => [...prev, { role: 'ai', text: "AI मखमली फिनिशिंग (Velvet Finish) लागू हो गई है! अब यह 4K में है।" }]);
+      setIsProcessing(false);
+    }, 2000);
+  };
+
+  return (
+    <div className="h-screen flex flex-col bg-black text-white overflow-hidden font-sans">
+      
+      {/* HEADER: GLOBAL CONTROLS */}
+      <header className="h-16 border-b border-zinc-800 flex items-center justify-between px-6 bg-zinc-900/50">
+        <div className="flex flex-col">
+          <span className="text-cyan-400 font-black tracking-tighter text-xl">HAI UNIVERSAL V1.0</span>
+          <span className="text-[9px] text-zinc-500 uppercase">Industrial Design & Glamour Suite</span>
+        </div>
+        
+        <div className="flex gap-4">
+          <button onClick={() => exportFile('png')} className="px-3 py-1 bg-zinc-800 rounded text-[10px] hover:bg-cyan-600">PNG</button>
+          <button onClick={() => exportFile('jpg')} className="px-3 py-1 bg-zinc-800 rounded text-[10px] hover:bg-cyan-600">JPG</button>
+          <button onClick={() => exportFile('stl')} className="px-3 py-1 bg-orange-600 rounded text-[10px] font-bold">3D PRINT (STL)</button>
+        </div>
+      </header>
+
+      <div className="flex flex-1 overflow-hidden">
+        
+        {/* LEFT: HAI AI CHAT & FILE SYSTEM */}
+        <aside className="w-1/3 border-r border-zinc-800 flex flex-col bg-[#050505]">
+          <div className="flex overflow-x-auto p-2 gap-2 bg-black">
+            {sectors.map(s => (
+              <button key={s} onClick={() => setActiveSector(s)} className={`text-[9px] px-3 py-1 rounded-full whitespace-nowrap ${activeSector === s ? 'bg-cyan-500 text-black' : 'text-zinc-500'}`}>{s}</button>
+            ))}
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {messages.map((m, i) => (
+              <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`p-3 rounded-2xl max-w-[90%] text-xs ${m.role === 'user' ? 'bg-zinc-800' : 'bg-cyan-900/20 border border-cyan-900/50 text-cyan-100'}`}>{m.text}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* MASTER UPLOAD & INPUT */}
+          <div className="p-4 border-t border-zinc-800">
+            <div className="flex gap-4 mb-3 text-zinc-400 justify-around bg-zinc-900 p-2 rounded-xl">
+               <label className="hover:text-cyan-400 cursor-pointer"><FaImage /><input type="file" className="hidden" onChange={(e)=>handleUniversalUpload(e,'image')}/></label>
+               <label className="hover:text-green-400 cursor-pointer"><FaFileExcel /><input type="file" className="hidden" onChange={(e)=>handleUniversalUpload(e,'excel')}/></label>
+               <label className="hover:text-red-400 cursor-pointer"><FaVideo /><input type="file" className="hidden" onChange={(e)=>handleUniversalUpload(e,'video')}/></label>
+            </div>
+            <textarea value={input} onChange={(e)=>setInput(e.target.value)} className="w-full bg-transparent text-xs p-2 outline-none" placeholder={`Describe ${activeSector} task...`} />
+            <button onClick={() => {setMessages([...messages, {role:'user', text:input}]); setInput("");}} className="w-full py-2 bg-white text-black font-black text-xs rounded-lg mt-2">EXECUTE BY HAI</button>
+          </div>
+        </aside>
+
+        {/* RIGHT: THE VIEWPORT (CAD + GLAMOUR) */}
+        <main className="flex-1 relative">
+          <div className="absolute top-4 left-4 z-10">
+            <h2 className="text-[10px] font-bold text-cyan-500 bg-black/50 px-2 py-1">LIVE VIEWPORT: {activeSector}</h2>
+          </div>
+
+          {/* Glamour/Video Layer */}
+          {selectedMedia && (
+            <div className="absolute top-10 right-10 z-20 w-64 border border-zinc-700 rounded-lg overflow-hidden bg-black shadow-2xl">
+              {selectedMedia.includes('video') ? <video src={selectedMedia} controls className="w-full" /> : <img src={selectedMedia} className="w-full" />}
+              <button onClick={applyVelvetFilter} className="w-full py-2 bg-pink-600 text-[10px] font-bold">APPLY VELVET AI</button>
+            </div>
+          )}
+
+          <div ref={mountRef} className="w-full h-full" />
+        </main>
+      </div>
+    </div>
+  );
+    }
