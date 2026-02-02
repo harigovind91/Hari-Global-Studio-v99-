@@ -3,214 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HAI DESIGN STUDIO | Multi-CAD Engine</title>
+    <title>HAI WORLD CAD | Global Engine</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <style>
-        body { background-color: #050505; color: #fff; margin: 0; overflow: hidden; font-family: 'Inter', sans-serif; }
-        .glass { background: rgba(15, 15, 20, 0.9); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.05); }
-        .active-tab { background: #00f3ff !important; color: #000 !important; font-weight: 800; box-shadow: 0 0 20px rgba(0, 243, 255, 0.3); }
+        body { background: #020202; color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .active-btn { background: #00f3ff; color: #000; box-shadow: 0 0 20px rgba(0, 243, 255, 0.4); border: none; font-weight: 800; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .side-panel { width: 260px; transition: all 0.3s ease; }
-        canvas { border-radius: 20px; }
+        canvas { border-radius: 2rem; }
+        .loading-pulse { animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
     </style>
 </head>
 <body>
     <div id="hai-root"></div>
 
-    <script src="./hai-core.js"></script>
-
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        function HAIDesignStudio() {
-            // State Management for CAD Types
-            const [sector, setSector] = useState("Electrical"); 
-            const [dimMode, setDimMode] = useState("3D Solid"); // Dimension based
-            const [techMode, setTechMode] = useState("Parametric"); // Tech based
-            const [fileName, setFileName] = useState("HAI_PROJECT_001");
-            
+        // 1. सभी 20 क्षेत्रों की फाइल मैपिंग
+        const CAD_MODULES = {
+            "Aerospace": "sectors/aerospace.js", "Automobile": "sectors/auto.js",
+            "Architecture": "sectors/arch.js", "Electrical": "MathEngine.js Library.js ConnectionLogic.js AIGenerator.js Simulator.js MasterDesigner.jsx ExportModule.js VisualSymbols.js UserDashboard.jsx MasterGuard.js",
+            "Electronics": "sectors/pcb.js", "Civil": "sectors/civil.js",
+            "Mechanical": "sectors/mech.js", "Fashion": "sectors/fashion.js",
+            "Medical": "sectors/medical.js", "Shipbuilding": "sectors/ship.js",
+            "Landscape": "sectors/land.js", "Interior": "sectors/interior.js",
+            "Product": "sectors/prod.js", "Jewelry": "sectors/jewel.js",
+            "Dental": "sectors/dental.js", "Plant": "sectors/plant.js",
+            "Structural": "sectors/struct.js", "HVAC": "sectors/hvac.js",
+            "Piping": "sectors/piping.js", "Manufacturing": "sectors/cim.js"
+        };
+
+        function HAIWorldCAD() {
+            const [selectedSector, setSelectedSector] = useState("Mechanical");
+            const [loading, setLoading] = useState(false);
             const mountRef = useRef(null);
 
-            // 3D Engine Logic
+            // 2. सेक्टर फाइल लोडर (Dynamic Script Injection)
             useEffect(() => {
-                const width = mountRef.current.clientWidth;
-                const height = mountRef.current.clientHeight;
+                setLoading(true);
+                const filePath = CAD_MODULES[selectedSector];
+                
+                // पुरानी स्क्रिप्ट हटाकर नई जोड़ना
+                const oldScript = document.getElementById('sector-logic');
+                if (oldScript) oldScript.remove();
+
+                const script = document.createElement('script');
+                script.id = 'sector-logic';
+                script.src = filePath;
+                script.onload = () => {
+                    setLoading(false);
+                    if(window.HAI_LOAD_TOOLS) window.HAI_LOAD_TOOLS(selectedSector);
+                };
+                script.onerror = () => {
+                    console.error("File not found: " + filePath);
+                    setLoading(false);
+                };
+                document.body.appendChild(script);
+
+                // 3D Scene (Simplified)
+                const width = mountRef.current.clientWidth, height = mountRef.current.clientHeight;
                 const scene = new THREE.Scene();
-                const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+                const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
                 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
                 renderer.setSize(width, height);
                 mountRef.current.innerHTML = '';
                 mountRef.current.appendChild(renderer.domElement);
-
-                // Grid setup
-                const grid = new THREE.GridHelper(100, 40, 0x00f3ff, 0x111111);
-                grid.material.opacity = 0.2;
-                grid.material.transparent = true;
-                scene.add(grid);
-
-                // Geometry mapping based on Sector & Dimension
-                let geometry;
-                const isWireframe = dimMode.includes("Wireframe");
-
-                if (sector === "Electrical" || sector === "Electronics") {
-                    geometry = new THREE.BoxGeometry(5, 0.2, 5); // PCB style
-                } else if (sector === "Aerospace") {
-                    geometry = new THREE.ConeGeometry(2, 5, 32);
-                } else {
-                    geometry = new THREE.TorusKnotGeometry(2, 0.5, 100, 16);
-                }
-
-                const material = new THREE.MeshBasicMaterial({ 
-                    color: 0x00f3ff, 
-                    wireframe: isWireframe || dimMode === "2D Planar" 
-                });
-                const mesh = new THREE.Mesh(geometry, material);
+                
+                const mesh = new THREE.Mesh(
+                    new THREE.TorusKnotGeometry(3, 0.8, 100, 16),
+                    new THREE.MeshBasicMaterial({ color: 0x00f3ff, wireframe: true })
+                );
                 scene.add(mesh);
-
-                camera.position.set(8, 8, 8);
-                camera.lookAt(0,0,0);
-
+                camera.position.z = 10;
+                
                 const animate = () => {
                     requestAnimationFrame(animate);
-                    mesh.rotation.y += 0.005;
+                    mesh.rotation.y += 0.01;
                     renderer.render(scene, camera);
                 };
                 animate();
-                return () => renderer.dispose();
-            }, [sector, dimMode]);
-
-            // Handle Logic from the 10 Files Bundle
-            const runSimulation = () => {
-                if(window.HAI_CORE) {
-                    alert(`Initiating ${sector} Simulation...\nTech: ${techMode}\nSecurity: Verified`);
-                } else {
-                    alert("HAI-CORE logic files not found. Please connect hai-core.js");
-                }
-            };
+            }, [selectedSector]);
 
             return (
-                <div className="flex h-screen w-screen bg-[#020202]">
-                    
-                    {/* LEFT PANEL: DIMENSIONS & TECH */}
-                    <aside className="side-panel glass border-r border-white/5 p-6 flex flex-col gap-8 z-50">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-cyan-500 rounded-lg flex items-center justify-center text-black font-black text-xl">H</div>
-                            <h1 className="font-black tracking-tighter text-lg">HAI STUDIO</h1>
-                        </div>
-
-                        {/* 1. Dimensions Based */}
-                        <div>
-                            <p className="text-[10px] font-bold text-zinc-500 mb-3 uppercase tracking-widest">Dimension Base</p>
-                            <div className="flex flex-col gap-2">
-                                {["2D Planar", "3D Wireframe", "3D Surface", "3D Solid"].map(d => (
-                                    <button key={d} onClick={() => setDimMode(d)} className={`text-left px-4 py-2 rounded-xl text-[11px] transition-all ${dimMode === d ? 'active-tab' : 'bg-white/5 hover:bg-white/10'}`}>
-                                        {d}
-                                    </button>
-                                ))}
+                <div className="flex h-screen p-4 gap-4 bg-[#010101]">
+                    {/* बायाँ पैनल: सेक्टर लिस्ट */}
+                    <aside className="w-80 glass rounded-[2.5rem] p-6 flex flex-col overflow-hidden">
+                        <div className="flex items-center gap-3 mb-8 border-b border-white/5 pb-4">
+                            <div className="w-10 h-10 bg-cyan-500 rounded-xl flex items-center justify-center text-black font-black text-xl shadow-[0_0_15px_rgba(0,243,255,0.5)]">H</div>
+                            <div>
+                                <h2 className="text-sm font-black tracking-tighter uppercase">HAI WORLD</h2>
+                                <p className="text-[9px] text-cyan-500 font-bold tracking-[3px]">CAD ENGINE</p>
                             </div>
                         </div>
-
-                        {/* 2. Technology Based */}
-                        <div>
-                            <p className="text-[10px] font-bold text-zinc-500 mb-3 uppercase tracking-widest">CAD Technology</p>
-                            <div className="flex gap-2">
-                                {["Parametric", "Direct"].map(t => (
-                                    <button key={t} onClick={() => setTechMode(t)} className={`flex-1 py-2 rounded-xl text-[11px] transition-all ${techMode === t ? 'bg-white text-black font-bold' : 'bg-zinc-900 text-zinc-500'}`}>
-                                        {t}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* 3. Industry Specific (Quick Switch) */}
-                        <div className="mt-auto">
-                             <p className="text-[10px] font-bold text-zinc-500 mb-3 uppercase tracking-widest">Industry Core</p>
-                             <div className="grid grid-cols-2 gap-2">
-                                {["Electrical", "Electronics", "Mechanical", "Aerospace"].map(i => (
-                                    <button key={i} onClick={() => setSector(i)} className={`p-2 rounded-lg text-[9px] border border-white/5 ${sector === i ? 'border-cyan-500 text-cyan-500' : ''}`}>
-                                        {i}
-                                    </button>
-                                ))}
-                             </div>
-                        </div>
-                    </aside>
-
-                    {/* MAIN ENGINE VIEWPORT */}
-                    <main className="flex-1 flex flex-col p-4 relative">
-                        
-                        <header className="h-14 flex items-center justify-between px-6 mb-4">
-                            <div className="flex items-center gap-4">
-                                <span className="text-[10px] font-mono text-cyan-500">ENGINE_MODE: {sector.toUpperCase()}</span>
-                                <input className="bg-transparent border-b border-white/10 text-xs py-1 outline-none w-48 font-mono" value={fileName} onChange={e => setFileName(e.target.value)} />
-                            </div>
-                            <div className="flex gap-2">
-                                <button onClick={runSimulation} className="bg-cyan-600 text-black px-4 py-2 rounded-lg text-[10px] font-bold uppercase hover:bg-cyan-400 transition">Run Logic</button>
-                                <button className="bg-zinc-800 text-white px-4 py-2 rounded-lg text-[10px] font-bold uppercase">Export .HAI</button>
-                            </div>
-                        </header>
-
-                        {/* 3D CANVAS AREA */}
-                        <div ref={mountRef} className="flex-1 glass rounded-[2.5rem] shadow-2xl relative overflow-hidden border border-cyan-500/10">
-                            <div className="absolute top-6 left-6 p-4 glass rounded-2xl border-l-4 border-cyan-500">
-                                <h3 className="text-xs font-bold text-cyan-400 mb-1">{sector} CAD System</h3>
-                                <p className="text-[9px] text-zinc-400 leading-tight">
-                                    {sector === 'Electrical' && "Active: Circuit Boards, Wiring, Altium Integration"}
-                                    {sector === 'Mechanical' && "Active: SolidWorks Engine, Machine Parts"}
-                                    {sector === 'Aerospace' && "Active: CATIA V6, Flight Surface Design"}
-                                    {sector === 'Electronics' && "Active: PCB Layers, Eagle Logic"}
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* FOOTER SECTOR SWITCHER */}
-                        <div className="h-20 flex items-center gap-3 overflow-x-auto no-scrollbar py-4 mt-2">
-                            {["Infrastructure", "Automobile", "Aerospace", "Electrical", "Electronics", "Fashion", "Landscape", "Product"].map(s => (
+                        <div className="overflow-y-auto no-scrollbar grid-container">
+                            {Object.keys(CAD_MODULES).map(s => (
                                 <button 
                                     key={s} 
-                                    onClick={() => setSector(s)}
-                                    className={`px-6 py-2 rounded-full text-[10px] font-bold whitespace-nowrap transition-all ${sector === s ? 'bg-white text-black scale-110' : 'bg-zinc-900 text-zinc-500 border border-white/5'}`}
+                                    onClick={() => setSelectedSector(s)}
+                                    className={`p-3 rounded-xl text-[10px] font-bold uppercase transition-all border ${selectedSector === s ? 'active-btn' : 'border-white/5 text-zinc-500 hover:text-white hover:bg-white/5'}`}
                                 >
-                                    {s} CAD
+                                    {s}
                                 </button>
                             ))}
                         </div>
-                    </main>
+                    </aside>
 
-                    {/* RIGHT INFO BAR */}
-                    <aside className="w-64 glass border-l border-white/5 p-6 flex flex-col gap-6">
-                        <div className="p-4 bg-cyan-500/5 rounded-2xl border border-cyan-500/20">
-                            <p className="text-[10px] font-bold text-cyan-500 mb-2 uppercase">Core Status</p>
-                            <div className="flex flex-col gap-2 text-[10px]">
-                                <div className="flex justify-between"><span>Files Linked:</span><span className="text-white">10/10</span></div>
-                                <div className="flex justify-between"><span>AI Latency:</span><span className="text-white">12ms</span></div>
-                                <div className="flex justify-between"><span>Render:</span><span className="text-white">Hardware Accel</span></div>
+                    {/* मुख्य पैनल: इंजन व्यू */}
+                    <main className="flex-1 flex flex-col gap-4">
+                        <header className="h-20 glass rounded-[2.5rem] flex items-center justify-between px-10 border-l-4 border-cyan-500">
+                            <div>
+                                <h1 className={`text-[10px] font-black uppercase tracking-[4px] ${loading ? 'text-yellow-500 loading-pulse' : 'text-cyan-500'}`}>
+                                    {loading ? 'SYNCING MODULE...' : 'SYSTEM ACTIVE'}
+                                </h1>
+                                <p className="text-2xl font-black uppercase italic">{selectedSector} Engine</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-[10px] text-zinc-500 font-mono">LINKED_FILE:</p>
+                                <p className="text-xs text-white font-mono bg-white/5 px-3 py-1 rounded-md">{CAD_MODULES[selectedSector]}</p>
+                            </div>
+                        </header>
+
+                        <div ref={mountRef} className="flex-1 glass rounded-[3rem] border border-cyan-500/10 relative overflow-hidden">
+                            {loading && (
+                                <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center">
+                                    <div className="text-cyan-500 font-black tracking-widest animate-pulse uppercase text-sm">Loading Sector Logic...</div>
+                                </div>
+                            )}
+                            <div className="absolute top-8 left-8 p-4 glass rounded-2xl border border-white/10">
+                                <p className="text-[10px] text-cyan-400 font-bold mb-1 underline">CORE DATA</p>
+                                <p className="text-[9px] text-zinc-400">FPS: 60.0</p>
+                                <p className="text-[9px] text-zinc-400">LATENCY: 0.02ms</p>
                             </div>
                         </div>
-
-                        <div className="flex-1 overflow-y-auto no-scrollbar">
-                             <p className="text-[10px] font-bold text-zinc-500 mb-4 uppercase">Project History</p>
-                             <div className="space-y-3">
-                                {[1,2,3].map(i => (
-                                    <div key={i} className="p-3 bg-white/5 rounded-xl border border-white/5">
-                                        <p className="text-[10px] text-white">Revision_v0.{i}</p>
-                                        <p className="text-[8px] text-zinc-500">Saved 2h ago</p>
-                                    </div>
-                                ))}
-                             </div>
-                        </div>
-                    </aside>
+                    </main>
                 </div>
             );
         }
 
         const root = ReactDOM.createRoot(document.getElementById('hai-root'));
-        root.render(<HAIDesignStudio />);
+        root.render(<HAIWorldCAD />);
     </script>
 </body>
 </html>
