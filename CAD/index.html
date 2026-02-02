@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HAI DESIGN STUDIO | Full Access</title>
+    <title>HAI DESIGN STUDIO | Multi-CAD Engine</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -14,183 +14,197 @@
     <style>
         body { background-color: #050505; color: #fff; margin: 0; overflow: hidden; font-family: 'Inter', sans-serif; }
         .glass { background: rgba(15, 15, 20, 0.9); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.05); }
-        .active-tool { background: #00f3ff; color: #000; box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
+        .active-tab { background: #00f3ff !important; color: #000 !important; font-weight: 800; box-shadow: 0 0 20px rgba(0, 243, 255, 0.3); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        canvas { border-radius: 24px; cursor: crosshair; }
-        input[type="file"] { display: none; }
+        .side-panel { width: 260px; transition: all 0.3s ease; }
+        canvas { border-radius: 20px; }
     </style>
 </head>
 <body>
     <div id="hai-root"></div>
 
+    <script src="./hai-core.js"></script>
+
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
         function HAIDesignStudio() {
-            const [sector, setSector] = useState("Infrastructure");
-            const [fileName, setFileName] = useState("HAI_PROJECT_ALPHA");
-            const [rotationSpeed, setRotationSpeed] = useState(0.005);
-            const [isAutoSaving, setIsAutoSaving] = useState(false);
+            // State Management for CAD Types
+            const [sector, setSector] = useState("Electrical"); 
+            const [dimMode, setDimMode] = useState("3D Solid"); // Dimension based
+            const [techMode, setTechMode] = useState("Parametric"); // Tech based
+            const [fileName, setFileName] = useState("HAI_PROJECT_001");
+            
             const mountRef = useRef(null);
-            const sceneRef = useRef(null);
 
-            // --- 1. Auto-Save Function ---
+            // 3D Engine Logic
             useEffect(() => {
-                const timer = setInterval(() => {
-                    setIsAutoSaving(true);
-                    localStorage.setItem('hai_last_sector', sector);
-                    localStorage.setItem('hai_project_name', fileName);
-                    setTimeout(() => setIsAutoSaving(false), 2000);
-                }, 10000); // Saves every 10 seconds
-                return () => clearInterval(timer);
-            }, [sector, fileName]);
+                const width = mountRef.current.clientWidth;
+                const height = mountRef.current.clientHeight;
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                renderer.setSize(width, height);
+                mountRef.current.innerHTML = '';
+                mountRef.current.appendChild(renderer.domElement);
 
-            // --- 2. 3D Engine Core Functions ---
-            useEffect(() => {
-                if (mountRef.current) {
-                    const width = mountRef.current.clientWidth;
-                    const height = mountRef.current.clientHeight;
-                    
-                    const scene = new THREE.Scene();
-                    sceneRef.current = scene;
-                    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-                    
-                    renderer.setSize(width, height);
-                    mountRef.current.innerHTML = '';
-                    mountRef.current.appendChild(renderer.domElement);
+                // Grid setup
+                const grid = new THREE.GridHelper(100, 40, 0x00f3ff, 0x111111);
+                grid.material.opacity = 0.2;
+                grid.material.transparent = true;
+                scene.add(grid);
 
-                    // Grid Function
-                    const grid = new THREE.GridHelper(100, 50, 0x00f3ff, 0x111111);
-                    grid.material.opacity = 0.15;
-                    grid.material.transparent = true;
-                    scene.add(grid);
+                // Geometry mapping based on Sector & Dimension
+                let geometry;
+                const isWireframe = dimMode.includes("Wireframe");
 
-                    // Geometry Logic based on Sector
-                    let geometry;
-                    switch(sector) {
-                        case "Automobile": geometry = new THREE.TorusKnotGeometry(2.5, 0.6, 100, 16); break;
-                        case "Aerospace": geometry = new THREE.ConeGeometry(3, 7, 32); break;
-                        case "Electronics": geometry = new THREE.SphereGeometry(3, 32, 32); break;
-                        case "Glamour Pro": geometry = new THREE.OctahedronGeometry(4, 0); break;
-                        default: geometry = new THREE.BoxGeometry(4, 8, 4);
-                    }
-
-                    const edges = new THREE.EdgesGeometry(geometry);
-                    const mesh = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x00f3ff }));
-                    scene.add(mesh);
-
-                    camera.position.set(12, 12, 12);
-                    camera.lookAt(0,0,0);
-
-                    const animate = () => {
-                        requestAnimationFrame(animate);
-                        mesh.rotation.y += rotationSpeed;
-                        renderer.render(scene, camera);
-                    };
-                    animate();
-
-                    // Cleanup on unmount
-                    return () => {
-                        renderer.dispose();
-                        geometry.dispose();
-                    };
+                if (sector === "Electrical" || sector === "Electronics") {
+                    geometry = new THREE.BoxGeometry(5, 0.2, 5); // PCB style
+                } else if (sector === "Aerospace") {
+                    geometry = new THREE.ConeGeometry(2, 5, 32);
+                } else {
+                    geometry = new THREE.TorusKnotGeometry(2, 0.5, 100, 16);
                 }
-            }, [sector, rotationSpeed]);
 
-            // --- 3. Export Function ---
-            const handleExport = () => {
-                const data = { project: fileName, sector: sector, timestamp: new Date().toISOString() };
-                const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `${fileName}.hai`;
-                link.click();
+                const material = new THREE.MeshBasicMaterial({ 
+                    color: 0x00f3ff, 
+                    wireframe: isWireframe || dimMode === "2D Planar" 
+                });
+                const mesh = new THREE.Mesh(geometry, material);
+                scene.add(mesh);
+
+                camera.position.set(8, 8, 8);
+                camera.lookAt(0,0,0);
+
+                const animate = () => {
+                    requestAnimationFrame(animate);
+                    mesh.rotation.y += 0.005;
+                    renderer.render(scene, camera);
+                };
+                animate();
+                return () => renderer.dispose();
+            }, [sector, dimMode]);
+
+            // Handle Logic from the 10 Files Bundle
+            const runSimulation = () => {
+                if(window.HAI_CORE) {
+                    alert(`Initiating ${sector} Simulation...\nTech: ${techMode}\nSecurity: Verified`);
+                } else {
+                    alert("HAI-CORE logic files not found. Please connect hai-core.js");
+                }
             };
 
             return (
-                <div className="flex h-screen w-screen overflow-hidden">
+                <div className="flex h-screen w-screen bg-[#020202]">
                     
-                    {/* SIDEBAR TOOLS */}
-                    <aside className="w-20 glass flex flex-col items-center py-8 gap-8 border-r border-white/5 z-50">
-                        <div className="w-12 h-12 bg-cyan-500 rounded-2xl flex items-center justify-center text-black font-black text-xl shadow-lg">H</div>
-                        
-                        <div className="flex flex-col gap-4">
-                            <button title="Rotate Fast" onClick={() => setRotationSpeed(0.05)} className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-cyan-500 hover:text-black transition"><i className="fas fa-sync-alt"></i></button>
-                            <button title="Stop Rotation" onClick={() => setRotationSpeed(0)} className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-red-500 transition"><i className="fas fa-pause"></i></button>
-                            <button title="Zoom In" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-zinc-800 transition"><i className="fas fa-search-plus"></i></button>
-                            <button title="3D Mesh" className="w-12 h-12 rounded-full active-tool flex items-center justify-center transition"><i className="fas fa-cube"></i></button>
+                    {/* LEFT PANEL: DIMENSIONS & TECH */}
+                    <aside className="side-panel glass border-r border-white/5 p-6 flex flex-col gap-8 z-50">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-cyan-500 rounded-lg flex items-center justify-center text-black font-black text-xl">H</div>
+                            <h1 className="font-black tracking-tighter text-lg">HAI STUDIO</h1>
                         </div>
 
-                        <div className="mt-auto flex flex-col gap-4">
-                            {isAutoSaving && <span className="text-[8px] text-cyan-500 animate-pulse font-bold">SAVING...</span>}
-                            <button className="text-zinc-600 hover:text-white transition"><i className="fas fa-cog text-xl"></i></button>
-                        </div>
-                    </aside>
-
-                    {/* MAIN ENGINE */}
-                    <main className="flex-1 flex flex-col relative bg-[#020202]">
-                        
-                        <header className="h-16 glass flex items-center justify-between px-8 border-b border-white/5 z-10">
-                            <div className="flex items-center gap-4">
-                                <span className="text-[10px] font-black tracking-widest text-cyan-500">HAI ENGINE V3</span>
-                                <div className="h-4 w-px bg-white/10"></div>
-                                <input 
-                                    className="bg-transparent border-none outline-none text-[10px] text-zinc-500 font-mono w-40" 
-                                    value={fileName} 
-                                    onChange={(e) => setFileName(e.target.value.toUpperCase())}
-                                />
-                            </div>
-                            
-                            <div className="flex gap-3">
-                                <label className="bg-zinc-900 px-5 py-2 rounded-xl text-[10px] font-bold cursor-pointer border border-white/10 hover:border-cyan-500 transition-all flex items-center gap-2">
-                                    <i className="fas fa-cloud-upload-alt text-blue-400"></i> IMPORT
-                                    <input type="file" onChange={(e) => setFileName(e.target.files[0].name.split('.')[0].toUpperCase())} />
-                                </label>
-                                <button onClick={handleExport} className="bg-cyan-600 text-black px-5 py-2 rounded-xl text-[10px] font-black uppercase shadow-lg">
-                                    DOWNLOAD PROJECT
-                                </button>
-                            </div>
-                        </header>
-
-                        <div className="flex-1 p-6 flex flex-col gap-6">
-                            {/* 3D CANVAS */}
-                            <div ref={mountRef} className="flex-1 bg-black/40 rounded-[3rem] border border-white/5 overflow-hidden shadow-inner relative">
-                                <div className="absolute top-6 left-6 flex gap-2">
-                                    <span className="bg-black/60 backdrop-blur px-3 py-1 rounded-full text-[9px] font-mono text-cyan-400 border border-cyan-500/20 tracking-tighter">RENDER: STABLE</span>
-                                    <span className="bg-black/60 backdrop-blur px-3 py-1 rounded-full text-[9px] font-mono text-cyan-400 border border-cyan-500/20 tracking-tighter">FPS: 60</span>
-                                </div>
-                            </div>
-
-                            {/* SECTOR SWITCHER */}
-                            <div className="h-16 flex gap-3 overflow-x-auto no-scrollbar pb-2">
-                                {["Infrastructure", "Automobile", "Aerospace", "Electronics", "Glamour Pro"].map(s => (
-                                    <button 
-                                        key={s} 
-                                        onClick={() => setSector(s)}
-                                        className={`px-8 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${sector === s ? 'bg-white text-black' : 'bg-zinc-900 text-zinc-500 border border-white/5 hover:border-white/20'}`}
-                                    >
-                                        {s}
+                        {/* 1. Dimensions Based */}
+                        <div>
+                            <p className="text-[10px] font-bold text-zinc-500 mb-3 uppercase tracking-widest">Dimension Base</p>
+                            <div className="flex flex-col gap-2">
+                                {["2D Planar", "3D Wireframe", "3D Surface", "3D Solid"].map(d => (
+                                    <button key={d} onClick={() => setDimMode(d)} className={`text-left px-4 py-2 rounded-xl text-[11px] transition-all ${dimMode === d ? 'active-tab' : 'bg-white/5 hover:bg-white/10'}`}>
+                                        {d}
                                     </button>
                                 ))}
                             </div>
                         </div>
 
-                        {/* AI ASSISTANT INPUT */}
-                        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-xl px-6">
-                            <form onSubmit={(e) => { e.preventDefault(); alert('HAI AI Processing your design command...'); }} className="glass rounded-full p-1.5 flex items-center gap-2 border border-white/10 shadow-2xl">
-                                <input 
-                                    type="text" 
-                                    placeholder="डिज़ाइन को मॉडिफाई करने के लिए यहाँ लिखें..." 
-                                    className="bg-transparent flex-1 outline-none px-5 text-xs text-white"
-                                />
-                                <button type="submit" className="w-10 h-10 rounded-full bg-cyan-500 text-black flex items-center justify-center hover:scale-105 transition">
-                                    <i className="fas fa-paper-plane text-xs"></i>
+                        {/* 2. Technology Based */}
+                        <div>
+                            <p className="text-[10px] font-bold text-zinc-500 mb-3 uppercase tracking-widest">CAD Technology</p>
+                            <div className="flex gap-2">
+                                {["Parametric", "Direct"].map(t => (
+                                    <button key={t} onClick={() => setTechMode(t)} className={`flex-1 py-2 rounded-xl text-[11px] transition-all ${techMode === t ? 'bg-white text-black font-bold' : 'bg-zinc-900 text-zinc-500'}`}>
+                                        {t}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 3. Industry Specific (Quick Switch) */}
+                        <div className="mt-auto">
+                             <p className="text-[10px] font-bold text-zinc-500 mb-3 uppercase tracking-widest">Industry Core</p>
+                             <div className="grid grid-cols-2 gap-2">
+                                {["Electrical", "Electronics", "Mechanical", "Aerospace"].map(i => (
+                                    <button key={i} onClick={() => setSector(i)} className={`p-2 rounded-lg text-[9px] border border-white/5 ${sector === i ? 'border-cyan-500 text-cyan-500' : ''}`}>
+                                        {i}
+                                    </button>
+                                ))}
+                             </div>
+                        </div>
+                    </aside>
+
+                    {/* MAIN ENGINE VIEWPORT */}
+                    <main className="flex-1 flex flex-col p-4 relative">
+                        
+                        <header className="h-14 flex items-center justify-between px-6 mb-4">
+                            <div className="flex items-center gap-4">
+                                <span className="text-[10px] font-mono text-cyan-500">ENGINE_MODE: {sector.toUpperCase()}</span>
+                                <input className="bg-transparent border-b border-white/10 text-xs py-1 outline-none w-48 font-mono" value={fileName} onChange={e => setFileName(e.target.value)} />
+                            </div>
+                            <div className="flex gap-2">
+                                <button onClick={runSimulation} className="bg-cyan-600 text-black px-4 py-2 rounded-lg text-[10px] font-bold uppercase hover:bg-cyan-400 transition">Run Logic</button>
+                                <button className="bg-zinc-800 text-white px-4 py-2 rounded-lg text-[10px] font-bold uppercase">Export .HAI</button>
+                            </div>
+                        </header>
+
+                        {/* 3D CANVAS AREA */}
+                        <div ref={mountRef} className="flex-1 glass rounded-[2.5rem] shadow-2xl relative overflow-hidden border border-cyan-500/10">
+                            <div className="absolute top-6 left-6 p-4 glass rounded-2xl border-l-4 border-cyan-500">
+                                <h3 className="text-xs font-bold text-cyan-400 mb-1">{sector} CAD System</h3>
+                                <p className="text-[9px] text-zinc-400 leading-tight">
+                                    {sector === 'Electrical' && "Active: Circuit Boards, Wiring, Altium Integration"}
+                                    {sector === 'Mechanical' && "Active: SolidWorks Engine, Machine Parts"}
+                                    {sector === 'Aerospace' && "Active: CATIA V6, Flight Surface Design"}
+                                    {sector === 'Electronics' && "Active: PCB Layers, Eagle Logic"}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* FOOTER SECTOR SWITCHER */}
+                        <div className="h-20 flex items-center gap-3 overflow-x-auto no-scrollbar py-4 mt-2">
+                            {["Infrastructure", "Automobile", "Aerospace", "Electrical", "Electronics", "Fashion", "Landscape", "Product"].map(s => (
+                                <button 
+                                    key={s} 
+                                    onClick={() => setSector(s)}
+                                    className={`px-6 py-2 rounded-full text-[10px] font-bold whitespace-nowrap transition-all ${sector === s ? 'bg-white text-black scale-110' : 'bg-zinc-900 text-zinc-500 border border-white/5'}`}
+                                >
+                                    {s} CAD
                                 </button>
-                            </form>
+                            ))}
                         </div>
                     </main>
+
+                    {/* RIGHT INFO BAR */}
+                    <aside className="w-64 glass border-l border-white/5 p-6 flex flex-col gap-6">
+                        <div className="p-4 bg-cyan-500/5 rounded-2xl border border-cyan-500/20">
+                            <p className="text-[10px] font-bold text-cyan-500 mb-2 uppercase">Core Status</p>
+                            <div className="flex flex-col gap-2 text-[10px]">
+                                <div className="flex justify-between"><span>Files Linked:</span><span className="text-white">10/10</span></div>
+                                <div className="flex justify-between"><span>AI Latency:</span><span className="text-white">12ms</span></div>
+                                <div className="flex justify-between"><span>Render:</span><span className="text-white">Hardware Accel</span></div>
+                            </div>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto no-scrollbar">
+                             <p className="text-[10px] font-bold text-zinc-500 mb-4 uppercase">Project History</p>
+                             <div className="space-y-3">
+                                {[1,2,3].map(i => (
+                                    <div key={i} className="p-3 bg-white/5 rounded-xl border border-white/5">
+                                        <p className="text-[10px] text-white">Revision_v0.{i}</p>
+                                        <p className="text-[8px] text-zinc-500">Saved 2h ago</p>
+                                    </div>
+                                ))}
+                             </div>
+                        </div>
+                    </aside>
                 </div>
             );
         }
@@ -199,5 +213,4 @@
         root.render(<HAIDesignStudio />);
     </script>
 </body>
-    </html>
-    
+</html>
